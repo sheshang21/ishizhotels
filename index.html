@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxe Horizons | Redefining Luxury Travel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --gold: #d4af87;
+            --beige: #f5f1e8;
+            --white: #ffffff;
+            --grey: #4a4a4a;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--black);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--gold);
+        }
+
+        section {
+            min-height: 100vh;
+            padding: 8rem 5% 5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero {
+            position: relative;
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .hero-content {
+            max-width: 900px;
+            animation: fadeInUp 1.5s ease;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-tagline {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: var(--black);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--grey);
+            max-width: 700px;
+            margin: 0 auto 4rem;
+            line-height: 1.8;
+        }
+
+        #journey {
+            background: var(--beige);
+        }
+
+        .journey-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .story-block {
+            margin-bottom: 3rem;
+        }
+
+        .story-block h3 {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .story-block p {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: var(--grey);
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .milestone {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 2px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .milestone:hover {
+            transform: translateY(-5px);
+        }
+
+        .milestone-year {
+            font-size: 2.5rem;
+            color: var(--gold);
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 1rem;
+        }
+
+        .milestone h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .milestone p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--grey);
+        }
+
+        #segmentation {
+            background: var(--white);
+        }
+
+        .segments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto 5rem;
+        }
+
+        .segment-card {
+            background: var(--beige);
+            padding: 3rem;
+            border-left: 3px solid var(--gold);
+        }
+
+        .segment-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--black);
+        }
+
+        .segment-card ul {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .segment-card li {
+            padding: 0.5rem 0;
+            color: var(--grey);
+            font-size: 0.95rem;
+        }
+
+        .segment-card li::before {
+            content: "•";
+            color: var(--gold);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .persona-card {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--black);
+            color: var(--white);
+            padding: 4rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            border-radius: 2px;
+        }
+
+        .persona-image {
+            width: 100%;
+            aspect-ratio: 3/4;
+            background: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .persona-details h3 {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .persona-details p {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .persona-details strong {
+            color: var(--gold);
+        }
+
+        #influencer {
+            background: var(--beige);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .content-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-top: 3px solid var(--gold);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .content-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+            color: var(--black);
+        }
+
+        .content-card p {
+            color: var(--grey);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .content-items {
+            margin-top: 1.5rem;
+            list-style: none;
+        }
+
+        .content-items li {
+            padding: 0.7rem 0;
+            color: var(--grey);
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(212, 175, 135, 0.2);
+        }
+
+        #email {
+            background: var(--white);
+        }
+
+        .email-sequence {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .email-card {
+            background: var(--beige);
+            padding: 3rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--gold);
+        }
+
+        .email-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--black);
+        }
+
+        .email-tag {
+            display: inline-block;
+            background: var(--gold);
+            color: var(--white);
+            padding: 0.3rem 1rem;
+            font-size: 0.8rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .email-card p {
+            color: var(--grey);
+            line-height: 1.8;
+        }
+
+        #virtual {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        #virtual .section-title {
+            color: var(--gold);
+        }
+
+        #virtual .section-subtitle {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .virtual-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .virtual-showcase {
+            background: rgba(255,255,255,0.05);
+            padding: 4rem;
+            border-radius: 2px;
+            margin-bottom: 3rem;
+        }
+
+        .virtual-showcase h3 {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+        }
+
+        .virtual-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            padding: 1.5rem;
+            background: rgba(212, 175, 135, 0.1);
+            border-radius: 2px;
+        }
+
+        .feature-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: var(--gold);
+        }
+
+        .feature-item p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .animation-placeholder {
+            width: 100%;
+            height: 400px;
+            background: rgba(212, 175, 135, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .animation-placeholder::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 135, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        #roi {
+            background: var(--beige);
+        }
+
+        .roi-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .formula-box {
+            background: var(--white);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .formula-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--gold);
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            color: var(--black);
+            padding: 1.5rem;
+            background: var(--beige);
+            border-left: 4px solid var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .formula-desc {
+            color: var(--grey);
+            line-height: 1.8;
+            margin-top: 1rem;
+        }
+
+        .roi-table {
+            width: 100%;
+            background: var(--white);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-collapse: collapse;
+        }
+
+        .roi-table th {
+            background: var(--black);
+            color: var(--gold);
+            padding: 1.5rem;
+            text-align: left;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .roi-table td {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--beige);
+            color: var(--grey);
+        }
+
+        .roi-table tr:hover {
+            background: var(--beige);
+        }
+
+        #contact {
+            background: var(--white);
+        }
+
+        .contact-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            background: var(--beige);
+            padding: 4rem;
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--black);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            color: var(--black);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--black);
+            color: var(--white);
+            padding: 1rem 3rem;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: var(--gold);
+            color: var(--black);
+        }
+
+        footer {
+            background: var(--black);
+            color: var(--white);
+            text-align: center;
+            padding: 3rem 5%;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            color: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-tagline {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .persona-card {
+                grid-template-columns: 1fr;
+                padding: 2rem;
+            }
+
+            .contact-form {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">LUXE HORIZONS</div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#journey">Journey</a></li>
+            <li><a href="#segmentation">Audience</a></li>
+            <li><a href="#influencer">Content</a></li>
+            <li><a href="#email">Engagement</a></li>
+            <li><a href="#virtual">Experience</a></li>
+            <li><a href="#roi">Value</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Redefining Luxury Travel in a Reimagined World</h1>
+            <p class="hero-tagline">Where Elegance Meets Innovation</p>
+            <p>After navigating unprecedented global challenges, we emerge stronger, more refined, and deeply committed to crafting extraordinary journeys that transcend expectations. Welcome to the new era of luxury travel.</p>
+        </div>
+    </section>
+
+    <section id="journey">
+        <div class="journey-content">
+            <h2 class="section-title">Our Journey</h2>
+            <p class="section-subtitle">From crisis to renaissance, discover how we transformed adversity into opportunity and reimagined the future of luxury travel.</p>
+
+            <div class="story-block">
+                <h3>The Challenge</h3>
+                <p>When the pandemic brought global travel to an unprecedented halt in 2020, Luxe Horizons faced its greatest test. Operations ceased overnight, partnerships dissolved, and the very foundation of our industry seemed uncertain. What appeared to be an ending became the catalyst for profound transformation.</p>
+            </div>
+
+            <div class="story-block">
+                <h3>The Transformation</h3>
+                <p>Rather than retreat, we chose to reimagine. We invested in virtual experiences, strengthened our commitment to sustainable luxury, and deepened relationships with our most valued clients. We rebuilt our technology infrastructure, curated partnerships with the world's finest hospitality brands, and developed innovative safety protocols that set new industry standards.</p>
+            </div>
+
+            <div class="story-block">
+                <h3>The Renaissance</h3>
+                <p>Today, we stand at the forefront of a new era in luxury travel. Our experiences are more personalized, our commitment to sustainability is unwavering, and our vision for the future has never been clearer. We have emerged not just recovered, but revolutionized.</p>
+            </div>
+
+            <div class="timeline">
+                <div class="milestone">
+                    <div class="milestone-year">2020</div>
+                    <h4>Strategic Pause</h4>
+                    <p>Complete operational assessment and client communication strategy implementation</p>
+                </div>
+                <div class="milestone">
+                    <div class="milestone-year">2021</div>
+                    <h4>Digital Innovation</h4>
+                    <p>Launch of virtual travel experiences and technology platform modernization</p>
+                </div>
+                <div class="milestone">
+                    <div class="milestone-year">2022</div>
+                    <h4>Phased Reopening</h4>
+                    <p>Curated destination partnerships and enhanced safety protocol integration</p>
+                </div>
+                <div class="milestone">
+                    <div class="milestone-year">2023</div>
+                    <h4>Full Renaissance</h4>
+                    <p>Complete service portfolio relaunch with sustainability-first luxury experiences</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="segmentation">
+        <h2 class="section-title">Our Audience</h2>
+        <p class="section-subtitle">Understanding the evolving desires of luxury travelers allows us to craft experiences that resonate deeply and deliver exceptional value.</p>
+
+        <div class="segments-grid">
+            <div class="segment-card">
+                <h3>The Conscious Explorer</h3>
+                <p>High-net-worth individuals who prioritize sustainable luxury and authentic cultural immersion</p>
+                <ul>
+                    <li>Age 35-55</li>
+                    <li>Household income $500K+</li>
+                    <li>Values environmental responsibility</li>
+                    <li>Seeks transformative experiences</li>
+                    <li>Average spend $25K per journey</li>
+                </ul>
+            </div>
+
+            <div class="segment-card">
+                <h3>The Elite Connoisseur</h3>
+                <p>Ultra-high-net-worth clients expecting absolute perfection and exclusive access</p>
+                <ul>
+                    <li>Age 45-65</li>
+                    <li>Household income $2M+</li>
+                    <li>Demands complete customization</li>
+                    <li>Values privacy and discretion</li>
+                    <li>Average spend $75K per journey</li>
+                </ul>
+            </div>
+
+            <div class="segment-card">
+                <h3>The Millennial Maverick</h3>
+                <p>Next-generation wealth creators seeking Instagram-worthy luxury with purpose</p>
+                <ul>
+                    <li>Age 28-40</li>
+                    <li>Household income $300K+</li>
+                    <li>Tech-savvy and socially conscious</li>
+                    <li>Values unique storytelling</li>
+                    <li>Average spend $15K per journey</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="persona-card">
+            <div class="persona-image"></div>
+            <div class="persona-details">
+                <h3>Marcus Chen</h3>
+                <p><strong>Age:</strong> 42 | <strong>Occupation:</strong> Tech Entrepreneur</p>
+                <p><strong>Income:</strong> $850K annually</p>
+                <p><strong>Travel Frequency:</strong> 6-8 luxury trips per year</p>
+                <p>Marcus represents our ideal conscious explorer. Recently sold his third startup and now seeks meaningful travel experiences that align with his values. He prefers boutique properties over large chains, wants authentic local connections, and will pay premium prices for sustainable luxury. His trips are meticulously researched but he values expert curation.</p>
+                <p><strong>Pain Points:</strong> Overcrowded destinations, inauthentic experiences, environmental guilt</p>
+                <p><strong>Lifetime Value:</strong> Estimated $400K over 5 years</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="influencer">
+        <h2 class="section-title">Influencer-Led Content Strategy</h2>
+        <p class="section-subtitle">Strategic partnerships with luxury lifestyle influencers will amplify our relaunch and rebuild trust through authentic storytelling.</p>
+
+        <div class="content-grid">
+            <div class="content-card">
+                <h3>Visual Storytelling</h3>
+                <p>Cinematic Instagram Reels and TikTok content showcasing our reimagined luxury experiences</p>
+                <ul class="content-items">
+                    <li>60-second destination reveals</li>
+                    <li>Behind-the-scenes property tours</li>
+                    <li>Sustainable luxury highlights</li>
+                    <li>Guest experience testimonials</li>
+                </ul>
+            </div>
+
+            <div class="content-card">
+                <h3>Editorial Content</h3>
+                <p>Long-form blog posts and articles that establish thought leadership in luxury travel</p>
+                <ul class="content-items">
+                    <li>Destination deep dives</li>
+                    <li>Sustainability in luxury travel</li>
+                    <li>Interview series with hoteliers</li>
+                    <li>Travel trend forecasting</li>
+                </ul>
+            </div>
+
+            <div class="content-card">
+                <h3>Immersive Experiences</h3>
+                <p>Virtual reality tours and 360-degree experiences bringing destinations to life</p>
+                <ul class="content-items">
+                    <li>Interactive property walkthroughs</li>
+                    <li>Virtual destination previews</li>
+                    <li>Live Q&A sessions with experts</li>
+                    <li>Curated travel planning webinars</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="email">
+        <h2 class="section-title">Reactivation Campaign</h2>
+        <p class="section-subtitle">A carefully orchestrated three-touch email sequence designed to reignite relationships with dormant clients and showcase our transformation.</p>
+
+        <div class="email-sequence">
+            <div class="email-card">
+                <span class="email-tag">EMAIL 1 | DAY 1</span>
+                <h3>Welcome Back to Extraordinary</h3>
+                <p>Subject: Marcus, we've reimagined luxury travel | Personal invitation inside</p>
+                <p>We understand these past years have changed how we all view travel. At Luxe Horizons, we've spent this time transforming everything. New sustainable partnerships. Enhanced private experiences. Uncompromising safety standards. We're inviting a select group of past clients to preview our renaissance collection before public launch. Your personalized portfolio awaits.</p>
+            </div>
+
+            <div class="email-card">
+                <span class="email-tag">EMAIL 2 | DAY 5</span>
+                <h3>Your Journey Begins Here</h3>
+                <p>Subject: 3 exclusive destinations curated for you</p>
+                <p>Based on your previous travels to Bhutan and Iceland, we've designed three new sustainable luxury experiences. Each features carbon-neutral logistics, exclusive property access, and deep cultural immersion. Preview your personalized collection and schedule a complimentary consultation with your dedicated travel curator. Limited availability for 2024 departures.</p>
+            </div>
+
+            <div class="email-card">
+                <span class="email-tag">EMAIL 3 | DAY 10</span>
+                <h3>Special Relaunch Offer</h3>
+                <p>Subject: $5,000 travel credit | Final invitation</p>
+                <p>As a valued returning client, receive $5,000 in travel credits toward any 2024 booking made by month end. This exclusive offer recognizes your patience during our transformation. Plus, complimentary luxury airport transfers and priority access to our new virtual concierge service. Let's plan your next extraordinary journey together.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="virtual">
+        <h2 class="section-title">Virtual Travel Experience</h2>
+        <p class="section-subtitle">Introducing immersive digital journeys that transcend physical boundaries while inspiring future travels.</p>
+
+        <div class="virtual-content">
+            <div class="virtual-showcase">
+                <h3>The Maldives Immersion</h3>
+                <p style="color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 2rem;">A fully interactive virtual reality experience showcasing our exclusive overwater villa collection. Explore pristine marine sanctuaries, tour sustainable luxury properties, meet local artisans, and experience world-class dining through 360-degree immersive content.</p>
+
+                <div class="animation-placeholder">
+                    <p style="color: var(--gold); font-size: 1.2rem; z-index: 1;">Interactive VR Experience</p>
+                </div>
+
+                <div class="virtual-features">
+                    <div class="feature-item">
+                        <h4>360° Property Tours</h4>
+                        <p>Navigate through our partner resorts with complete freedom, examining every detail at your pace</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Live Cultural Sessions</h4>
+                        <p>Real-time connections with local guides, chefs, and cultural ambassadors</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Personalized Planning</h4>
+                        <p>Save favorites, request information, and schedule consultations directly within the experience</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Environmental Impact</h4>
+                        <p>Discover each property's sustainability initiatives and conservation partnerships</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roi">
+        <h2 class="section-title">Customer Lifetime Value Model</h2>
+        <p class="section-subtitle">Understanding the long-term value of client relationships drives our commitment to exceptional experiences.</p>
+
+        <div class="roi-content">
+            <div class="formula-box">
+                <h3>CLV Calculation Framework</h3>
+                <div class="formula">
+                    CLV = (Average Trip Value × Annual Trips × Client Lifespan) - Acquisition Cost
+                </div>
+                <p class="formula-desc">This model accounts for repeat bookings, referrals, and the compounding value of trust-based relationships in luxury travel.</p>
+            </div>
+
+            <table class="roi-table">
+                <thead>
+                    <tr>
+                        <th>Client Segment</th>
+                        <th>Avg Trip Value</th>
+                        <th>Annual Frequency</th>
+                        <th>Lifespan (Years)</th>
+                        <th>Estimated CLV</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Conscious Explorer</td>
+                        <td>$25,000</td>
+                        <td>2.5 trips</td>
+                        <td>6 years</td>
+                        <td>$375,000</td>
+                    </tr>
+                    <tr>
+                        <td>Elite Connoisseur</td>
+                        <td>$75,000</td>
+                        <td>4 trips</td>
+                        <td>8 years</td>
+                        <td>$2,400,000</td>
+                    </tr>
+                    <tr>
+                        <td>Millennial Maverick</td>
+                        <td>$15,000</td>
+                        <td>3 trips</td>
+                        <td>5 years</td>
+                        <td>$225,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2 class="section-title">Begin Your Journey</h2>
+        <p class="section-subtitle">Connect with our team to discover how Luxe Horizons can craft your next extraordinary experience.</p>
+
+        <div class="contact-container">
+            <form class="contact-form" id="contactForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">SEND MESSAGE</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>LUXE HORIZONS | Redefining Luxury Travel Since 2015</p>
+        <p style="margin-top: 1rem; font-size: 0.8rem; color: rgba(212, 175, 135, 0.6);">© 2025 All Rights Reserved</p>
+    </footer>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your inquiry. Our team will contact you within 24 hours.');
+            this.reset();
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.milestone, .segment-card, .content-card, .email-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
