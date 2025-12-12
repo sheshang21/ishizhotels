@@ -278,6 +278,38 @@
             max-width: 1000px;
             margin: 0 auto;
         }
+        /* FIX virtual experience background overlay */
+        .virtual-showcase {
+            background: rgba(255,255,255,0.05) !important;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            background-image: none !important;
+        }
+        
+        /* FIX animation placeholder brightness */
+        .animation-placeholder {
+            background: rgba(212, 175, 135, 0.15) !important;
+        }
+        
+        /* FIX text visibility */
+        #virtual h3, 
+        #virtual p, 
+        .virtual-features h4 {
+            color: rgba(255,255,255,0.9) !important;
+        }
+        
+        /* FIX mobile responsiveness */
+        @media (max-width: 600px) {
+            .virtual-showcase {
+                padding: 2rem !important;
+            }
+            .animation-placeholder {
+                height: 240px !important;
+            }
+            .virtual-features {
+                grid-template-columns: 1fr !important;
+            }
+        }
 
         .virtual-showcase {
             background: rgba(255,255,255,0.05);
@@ -1170,4 +1202,5 @@
     </script>
 </body>
 </html>
+
 
