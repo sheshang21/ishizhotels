@@ -1,701 +1,985 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Black Tomato | Redefining Luxury Travel</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxe Horizons | Redefining Luxury Travel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<!-- Fonts (kept minimal) -->
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+        :root {
+            --black: #0a0a0a;
+            --gold: #d4af87;
+            --beige: #f5f1e8;
+            --white: #ffffff;
+            --grey: #4a4a4a;
+            --light-grey: #8a8a8a;
+        }
 
-<style>
-/* ==========================
-   THEME / CSS VARIABLES
-   ========================== */
+        html {
+            scroll-behavior: smooth;
+        }
 
-/* Light theme (default) + Soft Luxury Dark Mode variables */
-:root{
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --paper: #f5f1e8; /* beige */
-  --text: #0a0a0a;
-  --muted: #4a4a4a;
-  --muted-2: #8a8a8a;
-  --accent: #d4af87; /* gold */
-  --nav-bg: rgba(10,10,10,0.95);
-  --hero-overlay: rgba(0,0,0,0.4);
-  --focus: rgba(212,175,135,0.25);
-  --glass: rgba(255,255,255,0.06);
-  --transition: 260ms cubic-bezier(.2,.9,.3,1);
-  --max-width: 1200px;
-}
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--black);
+            background: var(--white);
+            overflow-x: hidden;
+        }
 
-/* Soft Luxury Dark Mode (Option 1) */
-body.dark {
-  --bg: #0e0e0e;
-  --surface: #121212;
-  --paper: #121212;
-  --text: #f3f3f3;
-  --muted: #cfcfcf;
-  --muted-2: #9f9f9f;
-  --accent: #c9a864; /* slightly muted gold */
-  --nav-bg: rgba(8,8,8,0.6);
-  --hero-overlay: rgba(0,0,0,0.45);
-  --glass: rgba(255,255,255,0.03);
-}
+        h1, h2, h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
 
-/* ==========================
-   GLOBAL RESET + LAYOUT
-   ========================== */
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-  background:var(--bg);
-  color:var(--text);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  line-height:1.6;
-  overflow-x:hidden;
-}
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: padding 0.3s ease;
+        }
 
-/* Headings use serif */
-h1,h2,h3 { font-family:'Cormorant Garamond', serif; font-weight:300; letter-spacing:1px; color:var(--text) }
+        .logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            letter-spacing: 3px;
+            transition: font-size 0.3s ease;
+        }
 
-/* max width container helper */
-.container { max-width:var(--max-width); margin:0 auto; padding:0 5%; }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
 
-/* ==========================
-   NAVIGATION (desktop unchanged visually)
-   ========================== */
-nav{
-  position:fixed; top:0; left:0; right:0;
-  z-index:1200;
-  background: var(--nav-bg);
-  backdrop-filter: blur(8px);
-  padding:1.1rem 5%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:1rem;
-  transition:padding var(--transition), background var(--transition);
-}
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
 
-.logo{
-  font-family:'Cormorant Garamond', serif;
-  font-size:1.6rem;
-  color:var(--accent);
-  letter-spacing:3px;
-}
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
 
-/* desktop links */
-.nav-links{ display:flex; gap:2rem; list-style:none; align-items:center; }
-.nav-links a{
-  color: #fff; /* keep links visible on dark nav */
-  text-decoration:none;
-  font-size:0.9rem;
-  font-weight:300;
-  letter-spacing:1px;
-  position:relative;
-  transition: color var(--transition);
-}
-.nav-links a::after{ content:''; position:absolute; left:0; bottom:-5px; height:1px; width:0; background:var(--accent); transition:width var(--transition); }
-.nav-links a:hover{ color:var(--accent); }
-.nav-links a:hover::after{ width:100%; }
+        nav a:hover {
+            color: var(--gold);
+        }
 
-/* ==========================
-   MOBILE: HAMBURGER & SLIDE-OUT
-   ========================== */
-/* hide mobile controls on desktop */
-.mobile-nav-toggle{ display:none; }
+        nav a:hover::after {
+            width: 100%;
+        }
 
-/* slide-out panel */
-.slide-panel{
-  position:fixed;
-  top:0;
-  right:calc(-100%); /* hidden by default */
-  height:100vh;
-  width:320px;
-  max-width:85%;
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  box-shadow:-30px 0 80px rgba(0,0,0,0.45);
-  z-index:1400;
-  padding:3.5rem 2rem;
-  transition: right 360ms cubic-bezier(.2,.9,.3,1);
-  display:flex;
-  flex-direction:column;
-  gap:1.25rem;
-  backdrop-filter: blur(8px);
-}
+        section {
+            min-height: 100vh;
+            padding: 8rem 5% 5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
 
-/* when open */
-.slide-panel.open{ right:0; }
+        .hero {
+            position: relative;
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+        }
 
-/* close button */
-.slide-close{
-  position:absolute; top:16px; right:16px;
-  background:transparent; border:0; color:var(--muted); font-size:1.1rem; cursor:pointer;
-}
+        .hero-content {
+            max-width: 900px;
+            animation: fadeInUp 1.5s ease;
+        }
 
-/* slide links vertical */
-.slide-links{ list-style:none; margin-top:0.8rem; display:flex; flex-direction:column; gap:1rem; padding:0; }
-.slide-links a{ color:var(--text); text-decoration:none; font-size:1.05rem; padding:0.5rem 0; }
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
 
-/* subtle overlay behind slide panel */
-.slide-overlay{
-  position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:1300; opacity:0; pointer-events:none; transition:opacity 260ms;
-}
-.slide-overlay.visible{ opacity:1; pointer-events:auto; }
+        .hero-tagline {
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+        }
 
-/* hamburger button */
-.hamburger{
-  width:44px; height:44px; display:inline-grid; place-items:center;
-  background:transparent; border:1px solid rgba(255,255,255,0.08); border-radius:8px; cursor:pointer;
-}
-.hamburger .bars{ width:20px; height:2px; background:#fff; display:block; position:relative; transition:transform 260ms, opacity 260ms; }
-.hamburger .bars::before, .hamburger .bars::after{
-  content:''; position:absolute; left:0; width:100%; height:2px; background:#fff; transition:transform 260ms, top 260ms;
-}
-.hamburger .bars::before{ top:-6px } .hamburger .bars::after{ top:6px }
+        .hero p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-weight: 300;
+            max-width: 700px;
+            margin: 0 auto;
+        }
 
-/* when open, animate to X */
-.hamburger.open .bars{ background:transparent; }
-.hamburger.open .bars::before{ transform:rotate(45deg); top:0; }
-.hamburger.open .bars::after{ transform:rotate(-45deg); top:0; }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-/* ==========================
-   HERO
-   ========================== */
-.hero{
-  position:relative;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  color: #fff;
-  padding:0 5%;
-  margin-top:68px; /* nav height */
-  background-color:#000;
-  background-image: linear-gradient(var(--hero-overlay), var(--hero-overlay)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80&auto=format&fit=crop');
-  background-size:cover; background-position:center center;
-  background-attachment:fixed;
-}
+        .section-title {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: var(--black);
+        }
 
-/* image fallback: if hero background fails we'll also have an <img> loader (see HTML) */
-.hero .hero-inner{ max-width:900px; margin:auto; animation:fadeInUp 1.2s ease both; padding:6rem 0; }
-.hero h1{ font-size:3.6rem; line-height:1.08; margin-bottom:0.7rem; color:var(--white) }
-.hero .hero-tagline{ color:var(--accent); font-size:1.25rem; margin-bottom:1rem; letter-spacing:1.5px }
-.hero p{ max-width:700px; margin:0 auto; font-size:1.05rem; color:rgba(255,255,255,0.95); font-weight:300 }
+        .section-subtitle {
+            text-align: center;
+            color: var(--grey);
+            max-width: 700px;
+            margin: 0 auto 4rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
 
-/* ==========================
-   SECTIONS + TITLES
-   ========================== */
-section{ min-height:60vh; padding:6.25rem 0; display:block; }
-.section-title{ font-size:2.8rem; margin-bottom:1rem; text-align:center; color:var(--text) }
-.section-subtitle{ text-align:center; color:var(--muted); max-width:700px; margin:0 auto 2.25rem; line-height:1.7; font-size:1.02rem }
+        #journey {
+            background: var(--beige);
+        }
 
-/* ==========================
-   JOURNEY (contrast fixes)
-   ========================== */
-#journey{ background:var(--paper); color:var(--text); }
-.journey-content{ max-width:var(--max-width); margin:0 auto; padding:0 5%; }
-.story-block{ margin-bottom:2.25rem; opacity:0; transform:translateY(16px); transition: opacity 640ms ease, transform 640ms ease; }
-.story-block.visible{ opacity:1; transform:translateY(0); }
-.story-block h3{ font-size:1.9rem; color:var(--accent); margin-bottom:0.5rem; }
-.story-block p{ color:var(--muted); font-size:1.05rem; line-height:1.85 }
+        .journey-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-/* timeline responsive */
-.timeline{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.6rem; margin-top:2.5rem; }
-.milestone{ background:var(--surface); padding:1.6rem; border-radius:6px; box-shadow:0 12px 32px rgba(0,0,0,0.06); opacity:0; transform:translateY(20px); transition:all 420ms ease; }
-.milestone.visible{ opacity:1; transform:none; }
-.milestone-year{ font-size:2.1rem; color:var(--accent); margin-bottom:0.5rem; font-family:'Cormorant Garamond', serif; }
+        .story-block {
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
 
-/* ==========================
-   VIRTUAL (dark section adjustments)
-   ========================== */
-#virtual{ background:var(--nav-bg); color:var(--text); padding-bottom:4rem; }
-#virtual .section-title{ color:var(--accent) }
-.virtual-showcase{ background:var(--glass); padding:2.3rem; border-radius:6px; border:1px solid rgba(212,175,135,0.08); }
-.virtual-showcase h3{ color:var(--accent); margin-bottom:1rem }
-.virtual-features{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin-top:1rem; }
-.feature-item{ background:rgba(212,175,135,0.07); padding:1rem; border-radius:6px; transition:all 220ms; }
-.feature-item h4{ color:var(--accent); margin-bottom:0.5rem; }
-.feature-item p{ color:var(--muted); font-size:0.95rem }
+        .story-block.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-/* shimmer placeholder (kept but toned down) */
-.animation-placeholder{ width:100%; height:320px; display:flex; align-items:center; justify-content:center; border-radius:6px; background:linear-gradient(90deg, rgba(212,175,135,0.03), rgba(212,175,135,0.06)); position:relative; overflow:hidden; margin:1.4rem 0; }
-.animation-placeholder::before{ content:''; position:absolute; height:100%; width:220px; left:-220px; top:0; background:linear-gradient(90deg, transparent, rgba(212,175,135,0.12), transparent); animation: shimmer 1.8s infinite; }
-@keyframes shimmer{ to { transform:translateX(140%); } }
+        .story-block h3 {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
 
-/* ==========================
-   ROI / TABLE
-   ========================== */
-#roi{ background:var(--paper); color:var(--text) }
-.formula-box{ background:var(--surface); padding:2rem; border-radius:6px; box-shadow:0 12px 32px rgba(0,0,0,0.06); margin-bottom:1.6rem; text-align:center; }
-.formula{ font-family:monospace; font-size:1.05rem; background:var(--paper); padding:0.9rem; border-left:4px solid var(--accent); border-radius:4px; color:var(--text) }
-.roi-table{ width:100%; border-collapse:collapse; border-radius:6px; overflow:hidden; box-shadow:0 12px 28px rgba(0,0,0,0.06); }
-.roi-table th{ background:var(--text); color:var(--accent); padding:1rem 1.2rem; text-align:left; font-weight:400 }
-.roi-table td{ background:var(--surface); padding:1rem 1.2rem; color:var(--muted); border-bottom:1px solid rgba(0,0,0,0.04) }
+        .story-block p {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: var(--grey);
+        }
 
-/* ==========================
-   CONTACT (improved UX)
-   ========================== */
-#contact{ background:var(--surface); color:var(--text); }
-.contact-container{ max-width:720px; margin:0 auto; padding:0 5% }
-.contact-form{ background:var(--paper); padding:2rem; border-radius:8px; box-shadow:0 12px 36px rgba(0,0,0,0.06); }
-.form-group{ margin-bottom:1rem; }
-.form-group label{ display:block; margin-bottom:0.35rem; color:var(--text); font-weight:500 }
-.input, textarea{ width:100%; padding:0.85rem; border:1px solid rgba(0,0,0,0.08); border-radius:6px; background:var(--surface); color:var(--text); font-size:0.98rem; }
-textarea{ min-height:140px; resize:vertical; }
-.input:focus, textarea:focus{ outline:none; box-shadow:0 0 0 4px var(--focus); border-color:var(--accent) }
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
 
-/* submit */
-.submit-btn{ background:var(--text); color:var(--white); padding:0.9rem 1.6rem; border-radius:6px; border:0; cursor:pointer; letter-spacing:1px; transition:all var(--transition); }
-.submit-btn:hover{ background:var(--accent); color:var(--text); transform:translateY(-3px); box-shadow:0 10px 24px rgba(0,0,0,0.12) }
+        .milestone {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 4px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
 
-/* ==========================
-   FOOTER
-   ========================== */
-footer{ background:linear-gradient(135deg,#0a0a0a 0%, #1a1a1a 100%); color:#fff; padding:3rem 5%; margin-top:2rem }
-.footer-content{ max-width:var(--max-width); margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1.6rem; align-items:start }
-.footer-section h3{ color:var(--accent); margin-bottom:0.75rem }
-.footer-section p,a{ color:rgba(255,255,255,0.78); font-size:0.95rem }
+        .milestone.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-/* ==========================
-   SMALL SCREENS (responsive behavior + show hamburger)
-   ========================== */
-@media (max-width:880px){
-  .nav-links{ display:none }           /* hide desktop links */
-  .mobile-nav-toggle{ display:inline-block } /* show hamburger */
-  nav{ padding:0.9rem 5% }
-  .hero{ background-attachment:scroll; height:72vh }
-  .hero h1{ font-size:2.1rem }
-  .hero p{ font-size:0.98rem }
-  section{ padding:5.5rem 0 }
-  .animation-placeholder{ height:220px }
-  .timeline{ grid-template-columns:1fr }
-}
+        .milestone:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(212, 175, 135, 0.2);
+        }
 
-/* tiny screens */
-@media (max-width:480px){
-  .logo{ font-size:1.05rem; letter-spacing:1.5px }
-  nav{ padding:0.7rem 4% }
-  .slide-panel{ width:92%; }
-  .hero{ height:62vh }
-  .hero h1{ font-size:1.6rem }
-  .section-title{ font-size:1.5rem }
-  .milestone-year{ font-size:1.5rem }
-  .submit-btn{ width:100% }
-}
+        .milestone-year {
+            font-size: 2.5rem;
+            color: var(--gold);
+            font-family: 'Cormorant Garamond', serif;
+            margin-bottom: 1rem;
+        }
 
-/* small animation for fadeIn */
-@keyframes fadeInUp{ from{ opacity:0; transform:translateY(18px) } to{ opacity:1; transform:none } }
-</style>
+        .milestone h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .milestone p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--grey);
+        }
+
+        #virtual {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        #virtual .section-title {
+            color: var(--gold);
+        }
+
+        #virtual .section-subtitle {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .virtual-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .virtual-showcase {
+            background: rgba(255,255,255,0.05);
+            padding: 4rem;
+            border-radius: 4px;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(212, 175, 135, 0.2);
+        }
+
+        .virtual-showcase h3 {
+            font-size: 2rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+        }
+
+        .virtual-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            padding: 1.5rem;
+            background: rgba(212, 175, 135, 0.1);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(212, 175, 135, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .feature-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            color: var(--gold);
+        }
+
+        .feature-item p {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .animation-placeholder {
+            width: 100%;
+            height: 400px;
+            background: rgba(212, 175, 135, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .animation-placeholder::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 135, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        #roi {
+            background: var(--beige);
+        }
+
+        .roi-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .formula-box {
+            background: var(--white);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            border-radius: 4px;
+        }
+
+        .formula-box h3 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            color: var(--gold);
+        }
+
+        .formula {
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            color: var(--black);
+            padding: 1.5rem;
+            background: var(--beige);
+            border-left: 4px solid var(--gold);
+            margin-bottom: 1rem;
+            border-radius: 2px;
+        }
+
+        .formula-desc {
+            color: var(--grey);
+            line-height: 1.8;
+            margin-top: 1rem;
+        }
+
+        .roi-table {
+            width: 100%;
+            background: var(--white);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            border-collapse: collapse;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .roi-table th {
+            background: var(--black);
+            color: var(--gold);
+            padding: 1.5rem;
+            text-align: left;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .roi-table td {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--beige);
+            color: var(--grey);
+        }
+
+        .roi-table tr:hover {
+            background: var(--beige);
+        }
+
+        #contact {
+            background: var(--white);
+        }
+
+        .contact-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-form {
+            background: var(--beige);
+            padding: 4rem;
+            border-radius: 4px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--black);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: var(--white);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            color: var(--black);
+            border-radius: 2px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background: var(--black);
+            color: var(--white);
+            padding: 1rem 3rem;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .submit-btn:hover {
+            background: var(--gold);
+            color: var(--black);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 135, 0.4);
+        }
+
+        footer {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: var(--white);
+            padding: 4rem 5% 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--gold);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(212, 175, 135, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--gold);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(212, 175, 135, 0.2);
+            padding-top: 2rem;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            color: var(--gold);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-bottom .copyright {
+            color: var(--light-grey);
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 1024px) {
+            nav ul {
+                gap: 1.5rem;
+            }
+
+            nav a {
+                font-size: 0.85rem;
+            }
+
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem 5%;
+            }
+
+            .logo {
+                font-size: 1.4rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav a {
+                font-size: 0.75rem;
+            }
+
+            .hero {
+                background-attachment: scroll;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-tagline {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .section-subtitle {
+                font-size: 0.95rem;
+            }
+
+            section {
+                padding: 6rem 5% 4rem;
+            }
+
+            .timeline {
+                grid-template-columns: 1fr;
+            }
+
+            .virtual-showcase {
+                padding: 2rem;
+            }
+
+            .animation-placeholder {
+                height: 300px;
+            }
+
+            .contact-form {
+                padding: 2rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+
+            .formula {
+                font-size: 1rem;
+                padding: 1rem;
+            }
+
+            .roi-table {
+                font-size: 0.85rem;
+            }
+
+            .roi-table th,
+            .roi-table td {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 1.2rem;
+                letter-spacing: 2px;
+            }
+
+            nav ul {
+                gap: 0.5rem;
+            }
+
+            nav a {
+                font-size: 0.7rem;
+                letter-spacing: 0.5px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 0.95rem;
+            }
+
+            .section-title {
+                font-size: 1.75rem;
+            }
+
+            .story-block h3 {
+                font-size: 1.5rem;
+            }
+
+            .contact-form {
+                padding: 1.5rem;
+            }
+
+            .submit-btn {
+                padding: 0.8rem 2rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <!-- NAV -->
-  <nav role="navigation" aria-label="Main Navigation">
-    <div class="logo">BLACK TOMATO</div>
+    <nav class="main-nav">
+        <div class="nav-left">
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#journey">Journey</a></li>
+            </ul>
+        </div>
 
-    <!-- desktop links (kept visually same as original) -->
-    <ul class="nav-links" aria-hidden="false">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#journey">Journey</a></li>
-      <li><a href="#virtual">Experience</a></li>
-      <li><a href="#roi">Value</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
+        <div class="nav-center">
+            <div class="logo">BLACK TOMATO</div>
+        </div>
 
-    <!-- mobile controls -->
-    <div style="display:flex;align-items:center;gap:0.6rem">
-      <!-- Dark mode toggle -->
-      <button id="darkToggle" aria-label="Toggle dark mode" title="Toggle dark mode" style="background:transparent;border:0;color:#fff;cursor:pointer;font-size:0.95rem;padding:6px 8px">
-        🌙
-      </button>
+        <div class="nav-right">
+            <ul class="nav-links">
+                <li><a href="#virtual">Experience</a></li>
+                <li><a href="#roi">Value</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
 
-      <!-- hamburger (appears only on small screens) -->
-      <button class="mobile-nav-toggle hamburger" aria-label="Open menu" id="hamburgerBtn" aria-controls="mobileMenu" aria-expanded="false" title="Open menu">
-        <span class="bars" aria-hidden="true"></span>
-      </button>
-    </div>
-  </nav>
+            <!-- Mobile hamburger -->
+            <button class="hamburger" id="hamburgerBtn" aria-label="Open Menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+        </div>
+    </nav>
 
-  <!-- SLIDE-OUT PANEL (mobile) -->
-  <div id="slideOverlay" class="slide-overlay" tabindex="-1" aria-hidden="true"></div>
+    <!-- Mobile full-screen overlay menu -->
+    <div id="mobileMenu" class="mobile-menu">
+        <button class="close-menu" id="closeMenu">×</button>
 
-  <aside id="mobileMenu" class="slide-panel" aria-hidden="true" aria-labelledby="mobileMenuLabel" role="dialog">
-    <button class="slide-close" id="slideClose" aria-label="Close menu">✕</button>
-    <div style="margin-top:0.6rem">
-      <div style="font-family:'Cormorant Garamond', serif; font-size:1.4rem; color:var(--accent); letter-spacing:1px; margin-bottom:1rem">BLACK TOMATO</div>
-      <nav>
-        <ul class="slide-links" role="menu">
-          <li><a href="#home" role="menuitem">Home</a></li>
-          <li><a href="#journey" role="menuitem">Journey</a></li>
-          <li><a href="#virtual" role="menuitem">Experience</a></li>
-          <li><a href="#roi" role="menuitem">Value</a></li>
-          <li><a href="#contact" role="menuitem">Contact</a></li>
+        <ul class="mobile-menu-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#journey">Journey</a></li>
+            <li><a href="#virtual">Experience</a></li>
+            <li><a href="#roi">Value</a></li>
+            <li><a href="#contact">Contact</a></li>
         </ul>
-      </nav>
-      <div style="margin-top:auto; padding-top:1.2rem; border-top:1px solid rgba(255,255,255,0.03);">
-        <p style="color:var(--muted); font-size:0.95rem; margin-bottom:0.6rem">Connect with us</p>
-        <div style="display:flex;gap:0.6rem">
-          <a href="#" aria-label="Instagram" style="text-decoration:none;color:var(--accent)">IG</a>
-          <a href="#" aria-label="Facebook" style="text-decoration:none;color:var(--accent)">FB</a>
-          <a href="#" aria-label="LinkedIn" style="text-decoration:none;color:var(--accent)">LI</a>
-        </div>
-      </div>
     </div>
-  </aside>
 
-  <!-- HERO -->
-  <main id="main">
-    <section id="home" class="hero" role="region" aria-label="Hero">
-      <!-- Preload image element (hidden) used as a fallback source loader if background fails -->
-      <img id="heroImgLoader" alt="Tropical overwater villa" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1600&q=80&auto=format&fit=crop" style="display:none" onerror="this.dataset.error='true'">
 
-      <div class="hero-inner container">
-        <h1>Redefining Luxury Travel in a Reimagined World</h1>
-        <div class="hero-tagline">Where Elegance Meets Innovation</div>
-        <p>After navigating unprecedented global challenges, we emerge stronger, more refined, and deeply committed to crafting extraordinary journeys that transcend expectations. Welcome to the new era of luxury travel.</p>
-      </div>
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Redefining Luxury Travel in a Reimagined World</h1>
+            <p class="hero-tagline">Where Elegance Meets Innovation</p>
+            <p>After navigating unprecedented global challenges, we emerge stronger, more refined, and deeply committed to crafting extraordinary journeys that transcend expectations. Welcome to the new era of luxury travel.</p>
+        </div>
     </section>
 
-    <!-- JOURNEY -->
-    <section id="journey" aria-labelledby="journeyTitle">
-      <div class="journey-content">
-        <h2 id="journeyTitle" class="section-title">Our Journey</h2>
-        <p class="section-subtitle">From crisis to renaissance, discover how we transformed adversity into opportunity and reimagined the future of luxury travel.</p>
+    <section id="journey">
+        <div class="journey-content">
+            <h2 class="section-title">Our Journey</h2>
+            <p class="section-subtitle">From crisis to renaissance, discover how we transformed adversity into opportunity and reimagined the future of luxury travel.</p>
 
-        <div class="story-block">
-          <h3>The Challenge</h3>
-          <p>When the pandemic brought global travel to an unprecedented halt in 2020, Black Tomato faced its greatest test. Operations ceased overnight, partnerships dissolved, and the very foundation of our industry seemed uncertain. What appeared to be an ending became the catalyst for profound transformation.</p>
+            <div class="story-block">
+                <h3>The Challenge</h3>
+                <p>When the pandemic brought global travel to an unprecedented halt in 2020, Luxe Horizons faced its greatest test. Operations ceased overnight, partnerships dissolved, and the very foundation of our industry seemed uncertain. What appeared to be an ending became the catalyst for profound transformation.</p>
+            </div>
+
+            <div class="story-block">
+                <h3>The Transformation</h3>
+                <p>Rather than retreat, we chose to reimagine. We invested in virtual experiences, strengthened our commitment to sustainable luxury, and deepened relationships with our most valued clients. We rebuilt our technology infrastructure, curated partnerships with the world's finest hospitality brands, and developed innovative safety protocols that set new industry standards.</p>
+            </div>
+
+            <div class="story-block">
+                <h3>The Renaissance</h3>
+                <p>Today, we stand at the forefront of a new era in luxury travel. Our experiences are more personalized, our commitment to sustainability is unwavering, and our vision for the future has never been clearer. We have emerged not just recovered, but revolutionized.</p>
+            </div>
+
+            <div class="timeline">
+                <div class="milestone">
+                    <div class="milestone-year">2020</div>
+                    <h4>Strategic Pause</h4>
+                    <p>Complete operational assessment and client communication strategy implementation</p>
+                </div>
+                <div class="milestone">
+                    <div class="milestone-year">2021</div>
+                    <h4>Digital Innovation</h4>
+                    <p>Launch of virtual travel experiences and technology platform modernization</p>
+                </div>
+                <div class="milestone">
+                    <div class="milestone-year">2022</div>
+                    <h4>Phased Reopening</h4>
+                    <p>Curated destination partnerships and enhanced safety protocol integration</p>
+                </div>
+                <div class="milestone">
+                    <div class="milestone-year">2023</div>
+                    <h4>Full Renaissance</h4>
+                    <p>Complete service portfolio relaunch with sustainability-first luxury experiences</p>
+                </div>
+            </div>
         </div>
-
-        <div class="story-block">
-          <h3>The Transformation</h3>
-          <p>Rather than retreat, we chose to reimagine. We invested in virtual experiences, strengthened our commitment to sustainable luxury, and deepened relationships with our most valued clients. We rebuilt our technology infrastructure, curated partnerships with the world's finest hospitality brands, and developed innovative safety protocols that set new industry standards.</p>
-        </div>
-
-        <div class="story-block">
-          <h3>The Renaissance</h3>
-          <p>Today, we stand at the forefront of a new era in luxury travel. Our experiences are more personalized, our commitment to sustainability is unwavering, and our vision for the future has never been clearer. We have emerged not just recovered, but revolutionized.</p>
-        </div>
-
-        <div class="timeline" aria-hidden="false">
-          <div class="milestone">
-            <div class="milestone-year">2020</div>
-            <h4>Strategic Pause</h4>
-            <p>Complete operational assessment and client communication strategy implementation</p>
-          </div>
-
-          <div class="milestone">
-            <div class="milestone-year">2021</div>
-            <h4>Digital Innovation</h4>
-            <p>Launch of virtual travel experiences and technology platform modernization</p>
-          </div>
-
-          <div class="milestone">
-            <div class="milestone-year">2022</div>
-            <h4>Phased Reopening</h4>
-            <p>Curated destination partnerships and enhanced safety protocol integration</p>
-          </div>
-
-          <div class="milestone">
-            <div class="milestone-year">2023</div>
-            <h4>Full Renaissance</h4>
-            <p>Complete service portfolio relaunch with sustainability-first luxury experiences</p>
-          </div>
-        </div>
-      </div>
     </section>
 
-    <!-- VIRTUAL -->
-    <section id="virtual" aria-labelledby="virtualTitle">
-      <div class="container">
-        <h2 id="virtualTitle" class="section-title">Virtual Travel Experience</h2>
+    <section id="virtual">
+        <h2 class="section-title">Virtual Travel Experience</h2>
         <p class="section-subtitle">Introducing immersive digital journeys that transcend physical boundaries while inspiring future travels.</p>
 
         <div class="virtual-content">
-          <div class="virtual-showcase">
-            <h3>The Maldives Immersion</h3>
-            <p style="color:rgba(255,255,255,0.9); line-height:1.8; margin-bottom:1.2rem">A fully interactive virtual reality experience showcasing our exclusive overwater villa collection. Explore pristine marine sanctuaries, tour sustainable luxury properties, meet local artisans, and experience world-class dining through 360-degree immersive content.</p>
+            <div class="virtual-showcase">
+                <h3>The Maldives Immersion</h3>
+                <p style="color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 2rem;">A fully interactive virtual reality experience showcasing our exclusive overwater villa collection. Explore pristine marine sanctuaries, tour sustainable luxury properties, meet local artisans, and experience world-class dining through 360-degree immersive content.</p>
 
-            <div class="animation-placeholder" role="img" aria-label="Interactive preview placeholder">
-              <strong style="color:var(--accent)">Interactive VR Experience</strong>
-            </div>
+                <div class="animation-placeholder">
+                    <p style="color: var(--gold); font-size: 1.2rem; z-index: 1;">Interactive VR Experience</p>
+                </div>
 
-            <div class="virtual-features">
-              <div class="feature-item"><h4>360° Property Tours</h4><p>Navigate through our partner resorts with complete freedom, examining every detail at your pace</p></div>
-              <div class="feature-item"><h4>Live Cultural Sessions</h4><p>Real-time connections with local guides, chefs, and cultural ambassadors</p></div>
-              <div class="feature-item"><h4>Personalized Planning</h4><p>Save favorites, request information, and schedule consultations directly within the experience</p></div>
-              <div class="feature-item"><h4>Environmental Impact</h4><p>Discover each property's sustainability initiatives and conservation partnerships</p></div>
+                <div class="virtual-features">
+                    <div class="feature-item">
+                        <h4>360° Property Tours</h4>
+                        <p>Navigate through our partner resorts with complete freedom, examining every detail at your pace</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Live Cultural Sessions</h4>
+                        <p>Real-time connections with local guides, chefs, and cultural ambassadors</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Personalized Planning</h4>
+                        <p>Save favorites, request information, and schedule consultations directly within the experience</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Environmental Impact</h4>
+                        <p>Discover each property's sustainability initiatives and conservation partnerships</p>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </section>
 
-    <!-- ROI -->
-    <section id="roi" aria-labelledby="roiTitle">
-      <div class="container">
-        <h2 id="roiTitle" class="section-title">Customer Lifetime Value Model</h2>
+    <section id="roi">
+        <h2 class="section-title">Customer Lifetime Value Model</h2>
         <p class="section-subtitle">Understanding the long-term value of client relationships drives our commitment to exceptional experiences.</p>
 
         <div class="roi-content">
-          <div class="formula-box">
-            <h3>CLV Calculation Framework</h3>
-            <div class="formula">CLV = (Average Trip Value × Annual Trips × Client Lifespan) - Acquisition Cost</div>
-            <p class="formula-desc">This model accounts for repeat bookings, referrals, and the compounding value of trust-based relationships in luxury travel.</p>
-          </div>
+            <div class="formula-box">
+                <h3>CLV Calculation Framework</h3>
+                <div class="formula">
+                    CLV = (Average Trip Value × Annual Trips × Client Lifespan) - Acquisition Cost
+                </div>
+                <p class="formula-desc">This model accounts for repeat bookings, referrals, and the compounding value of trust-based relationships in luxury travel.</p>
+            </div>
 
-          <table class="roi-table" aria-label="CLV estimates">
-            <thead>
-              <tr><th>Client Segment</th><th>Avg Trip Value</th><th>Annual Frequency</th><th>Lifespan (Years)</th><th>Estimated CLV</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Conscious Explorer</td><td>$25,000</td><td>2.5 trips</td><td>6 years</td><td>$375,000</td></tr>
-              <tr><td>Elite Connoisseur</td><td>$75,000</td><td>4 trips</td><td>8 years</td><td>$2,400,000</td></tr>
-              <tr><td>Millennial Maverick</td><td>$15,000</td><td>3 trips</td><td>5 years</td><td>$225,000</td></tr>
-            </tbody>
-          </table>
+            <table class="roi-table">
+                <thead>
+                    <tr>
+                        <th>Client Segment</th>
+                        <th>Avg Trip Value</th>
+                        <th>Annual Frequency</th>
+                        <th>Lifespan (Years)</th>
+                        <th>Estimated CLV</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Conscious Explorer</td>
+                        <td>$25,000</td>
+                        <td>2.5 trips</td>
+                        <td>6 years</td>
+                        <td>$375,000</td>
+                    </tr>
+                    <tr>
+                        <td>Elite Connoisseur</td>
+                        <td>$75,000</td>
+                        <td>4 trips</td>
+                        <td>8 years</td>
+                        <td>$2,400,000</td>
+                    </tr>
+                    <tr>
+                        <td>Millennial Maverick</td>
+                        <td>$15,000</td>
+                        <td>3 trips</td>
+                        <td>5 years</td>
+                        <td>$225,000</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-      </div>
     </section>
 
-    <!-- CONTACT -->
-    <section id="contact" aria-labelledby="contactTitle">
-      <div class="container">
-        <h2 id="contactTitle" class="section-title">Begin Your Journey</h2>
-        <p class="section-subtitle">Connect with our team to discover how Black Tomato can craft your next extraordinary experience.</p>
+    <section id="contact">
+        <h2 class="section-title">Begin Your Journey</h2>
+        <p class="section-subtitle">Connect with our team to discover how Luxe Horizons can craft your next extraordinary experience.</p>
 
         <div class="contact-container">
-          <form class="contact-form" id="contactForm" novalidate>
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input id="name" class="input" name="name" type="text" required minlength="2" aria-required="true">
-            </div>
-
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input id="email" class="input" name="email" type="email" required aria-required="true">
-            </div>
-
-            <div class="form-group">
-              <label for="message">Message</label>
-              <textarea id="message" class="input" name="message" required minlength="20" aria-required="true"></textarea>
-            </div>
-
-            <!-- simple honeypot -->
-            <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
-
-            <button type="submit" class="submit-btn">SEND MESSAGE</button>
-            <div id="formFeedback" role="status" aria-live="polite" style="margin-top:0.8rem;color:var(--muted)"></div>
-          </form>
+            <form class="contact-form" id="contactForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">SEND MESSAGE</button>
+            </form>
         </div>
-      </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
-      <div class="footer-content container">
-        <div class="footer-section">
-          <h3>Black Tomato</h3>
-          <p>Redefining luxury travel through extraordinary experiences, sustainable practices, and uncompromising service excellence since 2015.</p>
-          <div style="display:flex;gap:0.5rem;margin-top:0.6rem">
-            <a href="#" aria-label="Instagram" style="color:var(--accent);text-decoration:none">IG</a>
-            <a href="#" aria-label="Facebook" style="color:var(--accent);text-decoration:none">FB</a>
-            <a href="#" aria-label="Twitter" style="color:var(--accent);text-decoration:none">TW</a>
-            <a href="#" aria-label="LinkedIn" style="color:var(--accent);text-decoration:none">LI</a>
-          </div>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Luxe Horizons</h3>
+                <p>Redefining luxury travel through extraordinary experiences, sustainable practices, and uncompromising service excellence since 2015.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Instagram">IG</a>
+                    <a href="#" aria-label="Facebook">FB</a>
+                    <a href="#" aria-label="Twitter">TW</a>
+                    <a href="#" aria-label="LinkedIn">LI</a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#journey">Our Journey</a></li>
+                    <li><a href="#virtual">Virtual Experiences</a></li>
+                    <li><a href="#roi">Client Value</a></li>
+                    <li><a href="#contact">Contact Us</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: travel@luxehorizons.com</p>
+                <p>Phone: +1 (555) 123-4567</p>
+                <p>Hours: Mon-Fri 9AM-6PM EST</p>
+            </div>
         </div>
-
-        <div class="footer-section">
-          <h3>Quick Links</h3>
-          <ul style="list-style:none;padding:0">
-            <li style="margin-bottom:0.5rem"><a href="#journey" style="color:inherit;text-decoration:none">Our Journey</a></li>
-            <li style="margin-bottom:0.5rem"><a href="#virtual" style="color:inherit;text-decoration:none">Virtual Experiences</a></li>
-            <li style="margin-bottom:0.5rem"><a href="#roi" style="color:inherit;text-decoration:none">Client Value</a></li>
-            <li><a href="#contact" style="color:inherit;text-decoration:none">Contact Us</a></li>
-          </ul>
+        
+        <div class="footer-bottom">
+            <p>LUXE HORIZONS</p>
+            <p class="copyright">© 2025 Luxe Horizons. All Rights Reserved. Privacy Policy | Terms of Service</p>
         </div>
-
-        <div class="footer-section">
-          <h3>Contact</h3>
-          <p>Email: travel@blacktomato.com</p>
-          <p>Phone: +1 (555) 123-4567</p>
-          <p>Hours: Mon-Fri 9AM-6PM EST</p>
-        </div>
-      </div>
-
-      <div style="text-align:center;margin-top:1.1rem;color:var(--accent);font-weight:600">BLACK TOMATO</div>
-      <div style="text-align:center;margin-top:0.4rem;color:rgba(255,255,255,0.6);font-size:0.85rem">© 2025 Black Tomato. All Rights Reserved.</div>
     </footer>
-  </main>
 
-  <!-- ==========================
-       Inline JS (lightweight)
-       ========================== -->
-  <script>
-  (function(){
-    /* -----------------------------
-       Mobile slide panel logic
-       ----------------------------- */
-    const hamburgerBtn = document.getElementById('hamburgerBtn');
-    const slidePanel = document.getElementById('mobileMenu');
-    const slideOverlay = document.getElementById('slideOverlay');
-    const slideClose = document.getElementById('slideClose');
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your inquiry. Our team will contact you within 24 hours.');
+            this.reset();
+        });
 
-    function openPanel(){
-      slidePanel.classList.add('open');
-      slideOverlay.classList.add('visible');
-      hamburgerBtn.classList.add('open');
-      hamburgerBtn.setAttribute('aria-expanded','true');
-      slidePanel.setAttribute('aria-hidden','false');
-      slideOverlay.setAttribute('aria-hidden','false');
-      // trap focus lightly: focus first link
-      const firstLink = slidePanel.querySelector('.slide-links a');
-      if(firstLink) firstLink.focus();
-    }
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
 
-    function closePanel(){
-      slidePanel.classList.remove('open');
-      slideOverlay.classList.remove('visible');
-      hamburgerBtn.classList.remove('open');
-      hamburgerBtn.setAttribute('aria-expanded','false');
-      slidePanel.setAttribute('aria-hidden','true');
-      slideOverlay.setAttribute('aria-hidden','true');
-      hamburgerBtn.focus();
-    }
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
 
-    hamburgerBtn.addEventListener('click', function(){
-      const expanded = this.classList.contains('open');
-      if(expanded) closePanel(); else openPanel();
-    });
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
 
-    slideClose.addEventListener('click', closePanel);
-    slideOverlay.addEventListener('click', closePanel);
-
-    // close with Escape
-    document.addEventListener('keydown', function(e){
-      if(e.key === 'Escape' && slidePanel.classList.contains('open')) closePanel();
-    });
-
-    // close panel on internal anchor click (mobile)
-    slidePanel.querySelectorAll('a[href^="#"]').forEach(a=>{
-      a.addEventListener('click', function(){ closePanel(); });
-    });
-
-    /* -----------------------------
-       Smooth anchor scrolling for internal links
-       ----------------------------- */
-    document.querySelectorAll('a[href^="#"]').forEach(anchor=>{
-      anchor.addEventListener('click', function(e){
-        const href = this.getAttribute('href');
-        if(!href || href === '#') return;
-        const target = document.querySelector(href);
-        if(!target) return;
-        e.preventDefault();
-        target.scrollIntoView({behavior:'smooth', block:'start'});
-      });
-    });
-
-    /* -----------------------------
-       Intersection observer for reveal
-       ----------------------------- */
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){
-          entry.target.classList.add('visible');
-          // optional: unobserve to improve perf
-          io.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-
-    document.querySelectorAll('.story-block, .milestone, .feature-item').forEach(el=>{
-      io.observe(el);
-    });
-
-    /* -----------------------------
-       Contact form (lightweight) + simple validation
-       ----------------------------- */
-    const contactForm = document.getElementById('contactForm');
-    const formFeedback = document.getElementById('formFeedback');
-
-    contactForm.addEventListener('submit', async function(e){
-      e.preventDefault();
-      formFeedback.textContent = '';
-      const name = this.name.value.trim();
-      const email = this.email.value.trim();
-      const message = this.message.value.trim();
-      const honeypot = this.website?.value || '';
-
-      // basic client-side checks
-      if(honeypot){ formFeedback.textContent = 'Spam detected.'; return; }
-      if(!name || !email || !message || message.length < 20){
-        formFeedback.textContent = 'Please complete all fields. Message should be at least 20 characters.';
-        return;
-      }
-
-      // show instant thank you (replace with real fetch to server endpoint)
-      formFeedback.style.color = 'var(--muted)';
-      formFeedback.textContent = 'Sending…';
-
-      try{
-        // Example: send to /api/contact if you have a server endpoint configured.
-        // For now we simulate success to keep client-side only (lightweight).
-        await new Promise(res=>setTimeout(res,650)); // simulate
-        formFeedback.style.color = 'var(--muted)';
-        formFeedback.textContent = 'Thanks — we will reply within 24 hours.';
-        this.reset();
-      } catch(err){
-        formFeedback.style.color = 'tomato';
-        formFeedback.textContent = 'Sorry — there was an error. Please try again later.';
-      }
-    });
-
-    /* -----------------------------
-       Dark mode toggle (persist in localStorage)
-       ----------------------------- */
-    const darkToggle = document.getElementById('darkToggle');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const saved = localStorage.getItem('blacktomato-dark');
-
-    function applyDark(d){
-      if(d){ document.body.classList.add('dark'); darkToggle.textContent = '☀️'; }
-      else { document.body.classList.remove('dark'); darkToggle.textContent = '🌙'; }
-    }
-
-    // initial state: saved > prefers > default (light)
-    if(saved !== null) applyDark(saved === '1');
-    else applyDark(prefersDark);
-
-    darkToggle.addEventListener('click', function(){
-      const isDark = document.body.classList.contains('dark');
-      applyDark(!isDark);
-      localStorage.setItem('blacktomato-dark', !isDark ? '1' : '0');
-    });
-
-    /* -----------------------------
-       Hero background fallback: if background image fails, use inline style fallback
-       ----------------------------- */
-    const heroImg = document.getElementById('heroImgLoader');
-    heroImg.addEventListener('error', function(){
-      const hero = document.querySelector('.hero');
-      hero.style.backgroundImage = 'linear-gradient(var(--hero-overlay), var(--hero-overlay)), url("data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1200 800%22><rect width=%22100%25%22 height=%22100%25%22 fill=%22%23000000%22/></svg>")';
-    });
-
-    /* -----------------------------
-       Accessibility: ensure focus visibility for keyboard users
-       ----------------------------- */
-    document.addEventListener('keydown', function(e){
-      if(e.key === 'Tab') document.body.classList.add('show-focus');
-    });
-
-  })();
-  </script>
-</body>
-</html>
+        document.querySelectorAll('.milestone, .story-block, .feature-item').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
