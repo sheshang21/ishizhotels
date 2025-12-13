@@ -1,1206 +1,1736 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Black Tomato | Redefining Luxury Travel</title>
-
-    <!-- keep your original font imports -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@200;300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <style>
-        /* ===============================
-           ORIGINAL STYLE (kept) + FIXES
-           - I inserted non-destructive overrides after your original rules
-           - Nothing removed; only added/overridden where necessary
-           =============================== */
-
-        /* ---------- Baseline reset (kept) ---------- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ========== VARIABLES & RESET ========== */
         :root {
             --black: #0a0a0a;
+            --black-light: #1a1a1a;
             --gold: #d4af87;
+            --gold-dark: #c19a6b;
+            --gold-light: #e8d4b8;
             --beige: #f5f1e8;
+            --beige-dark: #ede7dc;
             --white: #ffffff;
             --grey: #4a4a4a;
-            --light-grey: #8a8a8a;
-        }
-        html { scroll-behavior: smooth; }
-        body {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--black);
-            background: var(--white);
-            overflow-x: hidden; /* FIX: prevent horizontal overflow */
-            -webkit-font-smoothing: antialiased;
-        }
-        h1, h2, h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-weight: 300;
-            letter-spacing: 2px;
+            --grey-light: #7a7a7a;
+            --red: #c9302c;
+            --red-dark: #8b1f1c;
+            
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Montserrat', sans-serif;
+            --font-accent: 'Playfair Display', serif;
+            
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.16);
+            --shadow-xl: 0 16px 48px rgba(0,0,0,0.24);
         }
 
-        /* ---------- NAV (kept) ---------- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body { 
+            font-family: var(--font-body); 
+            color: var(--black); 
+            background: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 300; letter-spacing: 0.05em; line-height: 1.2; }
+        h1 { font-size: clamp(2.5rem, 6vw, 5rem); }
+        h2 { font-size: clamp(2rem, 4vw, 3.5rem); }
+        h3 { font-size: clamp(1.5rem, 3vw, 2.5rem); }
+        p { font-size: clamp(0.95rem, 1.5vw, 1.1rem); line-height: 1.8; margin-bottom: 1rem; }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        img { max-width: 100%; height: auto; display: block; }
+
+        ::selection { background: var(--gold); color: var(--white); }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--beige); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 5px; }
+
+        /* ========== LOADING SCREEN ========== */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.8s, visibility 0.8s;
+        }
+        .loading-screen.hidden { opacity: 0; visibility: hidden; }
+        .loading-logo {
+            width: 120px;
+            height: 120px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+        }
+        .loading-text {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--gold);
+            letter-spacing: 0.3em;
+            margin-top: 2rem;
+            animation: fadeIn 2s;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* ========== NAVIGATION ========== */
         nav {
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(20px);
             z-index: 1000;
             padding: 1.5rem 5%;
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(212,175,135,0.1);
+        }
+        nav.scrolled { padding: 1rem 5%; box-shadow: var(--shadow-lg); }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: padding 0.3s ease;
         }
-
-        .logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.8rem;
+        .logo-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s;
+        }
+        .logo-link:hover { transform: scale(1.05); }
+        .logo-svg {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s;
+        }
+        .logo-link:hover .logo-svg { transform: rotate(5deg); }
+        .logo-text {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
             color: var(--gold);
-            letter-spacing: 3px;
-            transition: font-size 0.3s ease;
+            letter-spacing: 0.15em;
+            font-weight: 300;
         }
-
-        nav ul {
+        .nav-menu {
             display: flex;
             list-style: none;
             gap: 2.5rem;
         }
-
-        nav a {
+        .nav-menu a {
             color: var(--white);
-            text-decoration: none;
             font-size: 0.9rem;
             font-weight: 300;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
             position: relative;
+            padding: 0.5rem 0;
         }
-
-        nav a::after {
+        .nav-menu a::after {
             content: '';
             position: absolute;
-            bottom: -5px;
-            left: 0;
+            bottom: 0;
+            left: 50%;
             width: 0;
             height: 1px;
             background: var(--gold);
-            transition: width 0.3s ease;
+            transition: all 0.3s;
+            transform: translateX(-50%);
         }
+        .nav-menu a:hover::after { width: 100%; }
+        .nav-menu a:hover { color: var(--gold); }
 
-        nav a:hover {
-            color: var(--gold);
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* ---------- SECTIONS (kept) ---------- */
-        section {
-            min-height: 100vh;
-            padding: 8rem 5% 5rem;
-            display: flex;
+        .menu-toggle {
+            display: none;
             flex-direction: column;
-            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 8px;
         }
+        .menu-toggle span {
+            display: block;
+            width: 28px;
+            height: 2px;
+            background: var(--gold);
+            transition: all 0.3s;
+        }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translateY(8px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translateY(-8px); }
 
-        /* ---------- HERO (kept with background fixed on large, overridden on small) ---------- */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(10,10,10,0.98);
+            backdrop-filter: blur(20px);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s;
+        }
+        .mobile-nav.active { opacity: 1; visibility: visible; }
+        .mobile-nav-menu {
+            list-style: none;
+            text-align: center;
+        }
+        .mobile-nav-menu li {
+            margin: 2rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s;
+        }
+        .mobile-nav.active .mobile-nav-menu li { opacity: 1; transform: translateY(0); }
+        .mobile-nav-menu li:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-nav-menu li:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-nav-menu li:nth-child(3) { transition-delay: 0.2s; }
+        .mobile-nav-menu li:nth-child(4) { transition-delay: 0.25s; }
+        .mobile-nav-menu li:nth-child(5) { transition-delay: 0.3s; }
+        .mobile-nav-menu a {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--white);
+            letter-spacing: 0.1em;
+            transition: all 0.3s;
+        }
+        .mobile-nav-menu a:hover { color: var(--gold); transform: scale(1.1); }
+
+        /* ========== HERO ========== */
         .hero {
             position: relative;
             height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed; /* ORIGINAL: kept, but will be disabled on small devices below */
             display: flex;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            color: var(--white);
-            overflow: hidden; /* ensure children don't overflow */
-        }
-
-        .hero-content {
-            max-width: 900px;
-            animation: fadeInUp 1.5s ease;
-            padding: 0 1rem; /* small padding to avoid text touching edges on tiny screens */
-        }
-
-        .hero h1 {
-            font-size: 4.5rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.2;
-            word-break: break-word;
-        }
-
-        .hero-tagline {
-            font-size: 1.5rem;
-            color: var(--gold);
-            margin-bottom: 2rem;
-            letter-spacing: 2px;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            font-weight: 300;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* ---------- TITLES / SUBTITLES ---------- */
-        .section-title {
-            font-size: 3rem;
-            margin-bottom: 3rem;
-            text-align: center;
-            color: var(--black);
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: var(--grey);
-            max-width: 700px;
-            margin: 0 auto 4rem;
-            line-height: 1.8;
-            font-size: 1.05rem;
-        }
-
-        /* ---------- JOURNEY (kept) ---------- */
-        #journey {
-            background: var(--beige);
-        }
-
-        .journey-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .story-block {
-            margin-bottom: 3rem;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.8s ease;
-        }
-
-        .story-block.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .story-block h3 {
-            font-size: 2rem;
-            color: var(--gold);
-            margin-bottom: 1rem;
-        }
-
-        .story-block p {
-            font-size: 1.1rem;
-            line-height: 1.9;
-            color: var(--grey);
-        }
-
-        /* timeline grid - will be made scrollable on very small screens via JS/CSS below */
-        .timeline {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-top: 4rem;
-        }
-
-        .milestone {
-            background: var(--white);
-            padding: 2.5rem;
-            border-radius: 4px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-            transition: all 0.4s ease;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .milestone.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .milestone:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 50px rgba(212, 175, 135, 0.2);
-        }
-
-        .milestone-year {
-            font-size: 2.5rem;
-            color: var(--gold);
-            font-family: 'Cormorant Garamond', serif;
-            margin-bottom: 1rem;
-        }
-
-        .milestone h4 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-        }
-
-        .milestone p {
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: var(--grey);
-        }
-
-        /* ---------- VIRTUAL ---------- */
-        #virtual {
-            background: var(--black);
-            color: var(--white);
-        }
-
-        #virtual .section-title {
-            color: var(--gold);
-        }
-
-        #virtual .section-subtitle {
-            color: rgba(255,255,255,0.7);
-        }
-
-        .virtual-content {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        /* FIX virtual experience background overlay */
-        .virtual-showcase {
-            background: rgba(255,255,255,0.05) !important;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            background-image: none !important;
-        }
-        
-        /* FIX animation placeholder brightness */
-        .animation-placeholder {
-            background: rgba(212, 175, 135, 0.15) !important;
-        }
-        
-        /* FIX text visibility */
-        #virtual h3, 
-        #virtual p, 
-        .virtual-features h4 {
-            color: rgba(255,255,255,0.9) !important;
-        }
-        
-        /* FIX mobile responsiveness */
-        @media (max-width: 600px) {
-            .virtual-showcase {
-                padding: 2rem !important;
-            }
-            .animation-placeholder {
-                height: 240px !important;
-            }
-            .virtual-features {
-                grid-template-columns: 1fr !important;
-            }
-        }
-
-        .virtual-showcase {
-            background: rgba(255,255,255,0.05);
-            padding: 4rem;
-            border-radius: 4px;
-            margin-bottom: 3rem;
-            border: 1px solid rgba(212, 175, 135, 0.2);
-        }
-
-        .virtual-showcase h3 {
-            font-size: 2rem;
-            color: var(--gold);
-            margin-bottom: 2rem;
-        }
-
-        .virtual-features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .feature-item {
-            padding: 1.5rem;
-            background: rgba(212, 175, 135, 0.1);
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-
-        .feature-item:hover {
-            background: rgba(212, 175, 135, 0.15);
-            transform: translateY(-3px);
-        }
-
-        .feature-item h4 {
-            font-size: 1.2rem;
-            margin-bottom: 0.8rem;
-            color: var(--gold);
-        }
-
-        .feature-item p {
-            font-size: 0.9rem;
-            line-height: 1.7;
-            color: rgba(255,255,255,0.8);
-        }
-
-        .animation-placeholder {
-            width: 100%;
-            height: 400px;
-            background: rgba(212, 175, 135, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 2rem 0;
-            position: relative;
             overflow: hidden;
-            border-radius: 4px;
+            background: var(--black);
         }
-
-        .animation-placeholder::before {
-            content: '';
+        .hero-bg {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(212, 175, 135, 0.3), transparent);
-            animation: shimmer 2s infinite;
+            z-index: 1;
         }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* ---------- ROI ---------- */
-        #roi {
-            background: var(--beige);
-        }
-
-        .roi-content {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .formula-box {
-            background: var(--white);
-            padding: 3rem;
-            margin-bottom: 3rem;
-            text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-            border-radius: 4px;
-        }
-
-        .formula-box h3 {
-            font-size: 1.8rem;
-            margin-bottom: 2rem;
-            color: var(--gold);
-        }
-
-        .formula {
-            font-family: 'Courier New', monospace;
-            font-size: 1.3rem;
-            color: var(--black);
-            padding: 1.5rem;
-            background: var(--beige);
-            border-left: 4px solid var(--gold);
-            margin-bottom: 1rem;
-            border-radius: 2px;
-        }
-
-        .formula-desc {
-            color: var(--grey);
-            line-height: 1.8;
-            margin-top: 1rem;
-        }
-
-        .roi-table {
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            background: var(--white);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-            border-collapse: collapse;
-            border-radius: 4px;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.4) 50%, rgba(201,48,44,0.2) 100%);
+            z-index: 2;
+        }
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            animation: kenBurns 30s ease-in-out infinite alternate;
+        }
+        @keyframes kenBurns {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            color: var(--white);
+            max-width: 1000px;
+            padding: 0 2rem;
+            animation: fadeInUp 1.5s;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-subtitle {
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+        .hero h1 {
+            margin-bottom: 2rem;
+        }
+        .hero-tagline {
+            font-family: var(--font-accent);
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: var(--gold-light);
+            font-style: italic;
+            margin-bottom: 3rem;
+        }
+        .hero-description {
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            color: rgba(255,255,255,0.9);
+        }
+        .hero-cta {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .scroll-indicator {
+            position: absolute;
+            bottom: 4rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-10px); }
+            60% { transform: translateX(-50%) translateY(-5px); }
+        }
+        .scroll-indicator span {
+            display: block;
+            width: 24px;
+            height: 40px;
+            border: 2px solid var(--gold);
+            border-radius: 20px;
+            position: relative;
+        }
+        .scroll-indicator span::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            width: 4px;
+            height: 8px;
+            background: var(--gold);
+            border-radius: 2px;
+            transform: translateX(-50%);
+            animation: scrollWheel 2s infinite;
+        }
+        @keyframes scrollWheel {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(16px); }
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            border: 2px solid;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
             overflow: hidden;
         }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+            z-index: -1;
+        }
+        .btn:hover::before { width: 300%; height: 300%; }
+        .btn-primary {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--black);
+        }
+        .btn-primary::before { background: var(--gold-dark); }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(212,175,135,0.4);
+        }
+        .btn-secondary {
+            background: transparent;
+            border-color: var(--white);
+            color: var(--white);
+        }
+        .btn-secondary::before { background: var(--white); }
+        .btn-secondary:hover {
+            color: var(--black);
+            transform: translateY(-2px);
+        }
 
-        .roi-table th {
-            background: var(--black);
+        /* ========== SECTIONS ========== */
+        section {
+            padding: 8rem 5%;
+            position: relative;
+            overflow: hidden;
+        }
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s;
+        }
+        .section-header.visible { opacity: 1; transform: translateY(0); }
+        .section-label {
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
             color: var(--gold);
-            padding: 1.5rem;
-            text-align: left;
+            margin-bottom: 1rem;
             font-weight: 400;
-            letter-spacing: 1px;
         }
-
-        .roi-table td {
-            padding: 1.5rem;
-            border-bottom: 1px solid var(--beige);
+        .section-title {
+            margin-bottom: 2rem;
+        }
+        .section-decoration {
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+            margin: 2rem auto;
+        }
+        .section-description {
             color: var(--grey);
-        }
-
-        .roi-table tr:hover {
-            background: var(--beige);
-        }
-
-        /* ---------- CONTACT ---------- */
-        #contact {
-            background: var(--white);
-        }
-
-        .contact-container {
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
-        .contact-form {
+        /* ========== TIMELINE ========== */
+        #journey { background: var(--beige); }
+        .timeline {
+            position: relative;
+            padding: 4rem 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, transparent 0%, var(--gold) 10%, var(--gold) 90%, transparent 100%);
+            transform: translateX(-50%);
+        }
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-bottom: 8rem;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s;
+        }
+        .timeline-item.visible { opacity: 1; transform: translateY(0); }
+        .timeline-item:nth-child(even) .timeline-content { order: 2; text-align: left; }
+        .timeline-item:nth-child(odd) .timeline-content { order: 1; text-align: right; }
+        .timeline-content {
+            padding: 2rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.4s;
+        }
+        .timeline-content:hover { transform: translateY(-8px); box-shadow: var(--shadow-xl); }
+        .timeline-year {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            color: var(--gold);
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+        .timeline-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+        .timeline-description {
+            color: var(--grey);
+            line-height: 1.8;
+        }
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            width: 20px;
+            height: 20px;
+            background: var(--gold);
+            border: 4px solid var(--beige);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            box-shadow: 0 0 0 8px rgba(212,175,135,0.2);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 8px rgba(212,175,135,0.2); }
+            50% { box-shadow: 0 0 0 16px rgba(212,175,135,0); }
+        }
+
+        /* ========== VIRTUAL EXPERIENCES ========== */
+        #virtual { background: var(--black); color: var(--white); }
+        #virtual .section-title { color: var(--white); }
+        #virtual .section-description { color: rgba(255,255,255,0.8); }
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 4rem;
+            margin-top: 6rem;
+        }
+        .experience-card {
+            position: relative;
+            height: 450px;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s;
+        }
+        .experience-card.visible { opacity: 1; transform: translateY(0); }
+        .experience-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s;
+        }
+        .experience-card:hover .experience-image { transform: scale(1.1); }
+        .experience-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.9) 100%);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            transition: all 0.4s;
+        }
+        .experience-card:hover .experience-overlay {
+            background: linear-gradient(180deg, rgba(201,48,44,0.4) 0%, rgba(10,10,10,0.95) 100%);
+        }
+        .experience-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            transform: translateY(0);
+            transition: transform 0.4s;
+        }
+        .experience-card:hover .experience-title { transform: translateY(-10px); }
+        .experience-description {
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s;
+        }
+        .experience-card:hover .experience-description {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .experience-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gold);
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s;
+        }
+        .experience-card:hover .experience-link { opacity: 1; transform: translateY(0); }
+        .experience-link::after { content: '→'; transition: transform 0.2s; }
+        .experience-link:hover::after { transform: translateX(5px); }
+
+        /* ========== FEATURES ========== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 4rem;
+            margin-top: 6rem;
+        }
+        .feature-card {
+            padding: 3rem;
+            background: var(--beige);
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.4s;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        .feature-card.visible { opacity: 1; transform: translateY(0); }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+            background: var(--white);
+        }
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gold);
+            border-radius: 50%;
+            font-size: 2rem;
+            transition: all 0.4s;
+        }
+        .feature-card:hover .feature-icon {
+            transform: rotateY(360deg);
+            background: var(--red);
+        }
+        .feature-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .feature-description {
+            color: var(--grey);
+            line-height: 1.7;
+        }
+
+        /* ========== ROI/VALUE ========== */
+        #roi { background: linear-gradient(135deg, var(--beige) 0%, var(--beige-dark) 100%); }
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 4rem;
+            margin-top: 6rem;
+        }
+        .value-card {
+            text-align: center;
+            padding: 3rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        .value-card.visible { opacity: 1; transform: scale(1); }
+        .value-card:hover { transform: scale(1.05); box-shadow: var(--shadow-xl); }
+        .value-number {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            color: var(--gold);
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+        .value-label {
+            font-size: 1rem;
+            color: var(--grey);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 500;
+        }
+
+        /* ========== TESTIMONIALS ========== */
+        .testimonials-slider {
+            max-width: 900px;
+            margin: 6rem auto 0;
+            padding: 4rem 0;
+        }
+        .testimonial-card {
             background: var(--beige);
             padding: 4rem;
-            border-radius: 4px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            display: none;
+            animation: slideIn 0.6s;
+        }
+        .testimonial-card.active { display: block; }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .testimonial-quote {
+            font-family: var(--font-accent);
+            font-size: clamp(1.2rem, 2vw, 1.6rem);
+            font-style: italic;
+            color: var(--grey);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        .testimonial-quote::before {
+            content: '"';
+            font-size: 6rem;
+            color: var(--gold);
+            opacity: 0.2;
+            position: absolute;
+            top: -40px;
+            left: -20px;
+        }
+        .testimonial-author {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .testimonial-role {
+            font-size: 0.95rem;
+            color: var(--grey-light);
+            font-style: italic;
+        }
+        .testimonial-rating {
+            margin-top: 2rem;
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .slider-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: none;
+            color: var(--white);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .slider-btn:hover { background: var(--gold-dark); transform: scale(1.1); }
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--grey-light);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .dot.active {
+            background: var(--gold);
+            width: 32px;
+            border-radius: 6px;
         }
 
+        /* ========== CONTACT ========== */
+        #contact { background: var(--black); color: var(--white); }
+        #contact .section-title { color: var(--white); }
+        #contact .section-description { color: rgba(255,255,255,0.8); }
+        .contact-container { max-width: 800px; margin: 6rem auto 0; }
+        .contact-form {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            padding: 4rem;
+            border-radius: 16px;
+            border: 1px solid rgba(212,175,135,0.2);
+        }
         .form-group {
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s forwards;
         }
-
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
         .form-group label {
             display: block;
-            margin-bottom: 0.5rem;
-            color: var(--black);
-            font-weight: 400;
-            letter-spacing: 1px;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            font-weight: 500;
         }
-
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 1rem;
-            border: 1px solid rgba(0,0,0,0.1);
-            background: var(--white);
-            font-family: 'Montserrat', sans-serif;
+            padding: 1rem 1.5rem;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            color: var(--white);
+            font-family: var(--font-body);
             font-size: 1rem;
-            color: var(--black);
-            border-radius: 2px;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s;
         }
-
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: var(--gold);
+            background: rgba(255,255,255,0.12);
+            box-shadow: 0 0 0 3px rgba(212,175,135,0.1);
         }
-
         .form-group textarea {
             min-height: 150px;
             resize: vertical;
         }
-
-        .submit-btn {
-            background: var(--black);
-            color: var(--white);
-            padding: 1rem 3rem;
-            border: none;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 2px;
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255,255,255,0.4);
         }
-
-        .submit-btn:hover {
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
             background: var(--gold);
             color: var(--black);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(212, 175, 135, 0.4);
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
         }
-
-        /* ---------- FOOTER ---------- */
-        footer {
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-            color: var(--white);
-            padding: 4rem 5% 2rem;
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212,175,135,0.4);
         }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
+        .success-message {
+            display: none;
+            padding: 2rem;
+            background: rgba(40,167,69,0.2);
+            border: 1px solid rgba(40,167,69,0.4);
+            border-radius: 4px;
+            color: #4ade80;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        .success-message.show { display: block; animation: fadeInUp 0.6s; }
+        .contact-info {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 3rem;
+            gap: 4rem;
+            margin-top: 6rem;
+            padding-top: 6rem;
+            border-top: 1px solid rgba(212,175,135,0.2);
         }
-
-        .footer-section h3 {
-            color: var(--gold);
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            letter-spacing: 2px;
+        .info-item {
+            text-align: center;
+            opacity: 0;
+            animation: fadeInUp 0.6s forwards;
         }
-
-        .footer-section p,
-        .footer-section a {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            line-height: 1.8;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section a:hover {
-            color: var(--gold);
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.8rem;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-links a {
-            width: 40px;
-            height: 40px;
-            background: rgba(212, 175, 135, 0.1);
+        .info-item:nth-child(1) { animation-delay: 0.5s; }
+        .info-item:nth-child(2) { animation-delay: 0.6s; }
+        .info-item:nth-child(3) { animation-delay: 0.7s; }
+        .info-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
             background: var(--gold);
+            border-radius: 50%;
+            font-size: 1.5rem;
+        }
+        .info-title {
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        .info-details {
+            color: rgba(255,255,255,0.9);
+            line-height: 1.6;
+        }
+        .info-details a {
+            color: rgba(255,255,255,0.9);
+            transition: color 0.3s;
+        }
+        .info-details a:hover { color: var(--gold); }
+
+        /* ========== FOOTER ========== */
+        footer {
+            background: var(--black-light);
+            color: rgba(255,255,255,0.8);
+            padding: 6rem 5%;
+        }
+        .footer-container { max-width: 1400px; margin: 0 auto; }
+        .footer-main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 6rem;
+            padding-bottom: 6rem;
+            border-bottom: 1px solid rgba(212,175,135,0.2);
+        }
+        .footer-section h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+        .footer-section p {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+        .footer-links {
+            list-style: none;
+        }
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+        .footer-links a {
+            color: rgba(255,255,255,0.8);
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .footer-links a:hover {
+            color: var(--gold);
+            transform: translateX(5px);
+        }
+        .social-links {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .social-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(212,175,135,0.1);
+            border-radius: 50%;
+            color: var(--gold);
+            transition: all 0.3s;
+        }
+        .social-link:hover {
+            background: var(--gold);
+            color: var(--black);
             transform: translateY(-3px);
         }
-
         .footer-bottom {
-            border-top: 1px solid rgba(212, 175, 135, 0.2);
-            padding-top: 2rem;
-            text-align: center;
+            padding-top: 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
         }
-
-        .footer-bottom p {
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .footer-logo-svg {
+            width: 40px;
+            height: 40px;
+        }
+        .footer-logo-text {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
             color: var(--gold);
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
+            letter-spacing: 0.15em;
+        }
+        .copyright {
+            color: rgba(255,255,255,0.5);
+            font-size: 0.9rem;
+        }
+        .footer-legal {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+        }
+        .footer-legal a {
+            color: rgba(255,255,255,0.6);
+            transition: color 0.3s;
+        }
+        .footer-legal a:hover { color: var(--gold); }
+
+        /* ========== SCROLL TO TOP ========== */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--gold);
+            color: var(--black);
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 500;
+            box-shadow: var(--shadow-lg);
+        }
+        .scroll-to-top.visible { opacity: 1; visibility: visible; }
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-xl);
         }
 
-        .footer-bottom .copyright {
-            color: var(--light-grey);
-            font-size: 0.75rem;
+        /* ========== PROGRESS BAR ========== */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--red));
+            z-index: 10001;
+            transition: width 0.1s;
+            box-shadow: 0 0 10px var(--gold);
         }
 
-        /* ---------- DEFAULT MEDIA QUERIES (kept and refined) ---------- */
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 1024px) {
-            nav ul {
-                gap: 1.5rem;
+            section { padding: 6rem 4%; }
+            .timeline::before { left: 30px; }
+            .timeline-item {
+                grid-template-columns: 1fr;
+                padding-left: 60px;
             }
-
-            nav a {
-                font-size: 0.85rem;
+            .timeline-item:nth-child(even) .timeline-content,
+            .timeline-item:nth-child(odd) .timeline-content {
+                order: 1;
+                text-align: left;
             }
-
-            .hero h1 {
-                font-size: 3.5rem;
-            }
-
-            .section-title {
-                font-size: 2.5rem;
-            }
+            .timeline-marker { left: 30px; }
         }
 
         @media (max-width: 768px) {
-            nav {
-                padding: 1rem 5%;
+            nav { padding: 1rem 4%; }
+            .nav-menu { display: none; }
+            .menu-toggle { display: flex; }
+            .hero-cta {
+                flex-direction: column;
+                align-items: center;
             }
-
-            .logo {
-                font-size: 1.4rem;
-            }
-
-            nav ul {
-                gap: 1rem;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            nav a {
-                font-size: 0.75rem;
-            }
-
-            .hero {
-                /* fix: background-attachment fixed is disabled below for small screens */
-                background-attachment: scroll;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-tagline {
-                font-size: 1.1rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .section-subtitle {
-                font-size: 0.95rem;
-            }
-
-            section {
-                padding: 6rem 5% 4rem;
-            }
-
-            .timeline {
-                grid-template-columns: 1fr;
-                gap: 1.25rem;
-            }
-
-            .virtual-showcase {
-                padding: 2rem;
-            }
-
-            .animation-placeholder {
-                height: 300px;
-            }
-
-            .contact-form {
-                padding: 2rem;
-            }
-
-            .footer-content {
+            .btn { width: 100%; max-width: 300px; }
+            .experience-grid,
+            .features-grid,
+            .value-grid {
                 grid-template-columns: 1fr;
                 gap: 2rem;
+            }
+            .timeline-item {
+                margin-bottom: 4rem;
+                padding-left: 40px;
+            }
+            .footer-main {
+                grid-template-columns: 1fr;
+                gap: 4rem;
+            }
+            .footer-bottom {
+                flex-direction: column;
                 text-align: center;
-            }
-
-            .social-links {
-                justify-content: center;
-            }
-
-            .formula {
-                font-size: 1rem;
-                padding: 1rem;
-            }
-
-            .roi-table {
-                font-size: 0.85rem;
-            }
-
-            .roi-table th,
-            .roi-table td {
-                padding: 1rem;
             }
         }
 
         @media (max-width: 480px) {
-            .logo {
-                font-size: 1.2rem;
-                letter-spacing: 2px;
+            section { padding: 4rem 5%; }
+            .logo-svg { width: 40px; height: 40px; }
+            .logo-text { font-size: 1.3rem; }
+            .timeline-item { padding-left: 30px; }
+            .timeline-marker {
+                left: 20px;
+                width: 16px;
+                height: 16px;
             }
-
-            nav ul {
-                gap: 0.5rem;
-            }
-
-            nav a {
-                font-size: 0.7rem;
-                letter-spacing: 0.5px;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 0.95rem;
-            }
-
-            .section-title {
-                font-size: 1.75rem;
-            }
-
-            .story-block h3 {
-                font-size: 1.5rem;
-            }
-
-            .contact-form {
-                padding: 1.5rem;
-            }
-
-            .submit-btn {
-                padding: 0.8rem 2rem;
-                font-size: 0.9rem;
+            .experience-card { height: 350px; }
+            .testimonial-card { padding: 2rem; }
+            .contact-form { padding: 2rem; }
+            .scroll-to-top {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
             }
         }
 
-        /* ===========================
-           NON-DESTRUCTIVE FIXES ADDED
-           - These overrides correct mobile image/background behavior and overflow
-           - They do NOT remove or alter your original DOM
-           =========================== */
-
-        /* fix: ensure no element exceeds viewport width */
-        html, body {
-            max-width: 100vw;
-            overflow-x: hidden; /* double-safeguard for horizontal white strip */
-        }
-
-        /* fix: images must never overflow and always maintain cover/center */
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            object-fit: cover; /* ensures fill without distortion when used in constrained boxes */
-        }
-
-        /* ensure background images always cover & center (stronger rule) */
-        .hero, .virtual-showcase, .animation-placeholder {
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: cover !important;
-        }
-
-        /* fix: disable background-attachment: fixed on touch devices/smaller screens only
-           so hero won't break or scale improperly on mobile */
-        @media (max-width: 1024px), (pointer: coarse) {
-            .hero { background-attachment: scroll !important; }
-        }
-
-        /* fix: timeline - if viewport < 520px allow horizontal scroll so items don't push layout */
-        @media (max-width: 520px) {
-            .timeline {
-                display: flex;
-                gap: 1rem;
-                overflow-x: auto;
-                padding-bottom: 8px;
-                -webkit-overflow-scrolling: touch;
-            }
-            .timeline .milestone {
-                min-width: 260px;
-                flex: 0 0 auto;
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
-
-        /* fix: ROI table container scroll on small screens to avoid breaking layout */
-        @media (max-width: 640px) {
-            .roi-content > div {
-                overflow-x: auto;
-            }
-        }
-
-        /* fix: ensure containers do not contribute to overflow */
-        .hero-content, .journey-content, .virtual-content, .roi-content, .contact-container, .footer-content {
-            width: 100%;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-
-        /* small tweak: prevent long words from overflowing container */
-        p, li, td, th {
-            word-wrap: break-word;
-            hyphens: auto;
-        }
-
-        /* subtle focus style for accessibility */
-        a:focus, button:focus, input:focus, textarea:focus {
-            outline: 3px solid rgba(212,175,135,0.18);
-            outline-offset: 2px;
-        }
-
     </style>
 </head>
 <body>
-    <!-- NAV (same as your original nav content, not removed) -->
-    <nav>
-        <div class="logo">BLACK TOMATO</div>
-        <ul>
-            <li><a href="#home">Home</a></li>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div style="text-align: center;">
+            <svg class="loading-logo" viewBox="0 0 100 100">
+                <ellipse cx="50" cy="55" rx="35" ry="32" fill="#c9302c"/>
+                <path d="M45,25 Q40,20 35,23 Q30,26 32,30 L38,35 Z" fill="#2d5016"/>
+                <path d="M50,23 Q50,18 55,20 Q60,22 58,27 L52,33 Z" fill="#2d5016"/>
+                <path d="M55,25 Q60,21 65,24 Q70,27 68,32 L62,36 Z" fill="#2d5016"/>
+            </svg>
+            <div class="loading-text">BLACK TOMATO</div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Navigation -->
+    <nav id="mainNav">
+        <div class="nav-container">
+            <a href="#" class="logo-link">
+                <svg class="logo-svg" viewBox="0 0 100 100">
+                    <ellipse cx="50" cy="55" rx="35" ry="32" fill="#c9302c"/>
+                    <path d="M45,25 Q40,20 35,23 Q30,26 32,30 L38,35 Z" fill="#2d5016"/>
+                    <path d="M50,23 Q50,18 55,20 Q60,22 58,27 L52,33 Z" fill="#2d5016"/>
+                    <path d="M55,25 Q60,21 65,24 Q70,27 68,32 L62,36 Z" fill="#2d5016"/>
+                </svg>
+                <span class="logo-text">BLACK TOMATO</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="#journey">Journey</a></li>
+                <li><a href="#virtual">Experiences</a></li>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#roi">Value</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Nav -->
+    <div class="mobile-nav" id="mobileNav">
+        <ul class="mobile-nav-menu">
             <li><a href="#journey">Journey</a></li>
-            <li><a href="#virtual">Experience</a></li>
+            <li><a href="#virtual">Experiences</a></li>
+            <li><a href="#features">Features</a></li>
             <li><a href="#roi">Value</a></li>
             <li><a href="#contact">Contact</a></li>
         </ul>
-    </nav>
+    </div>
 
-    <!-- HERO (kept content; background image preserved) -->
-    <section id="home" class="hero" style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1920&q=80');">
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-bg">
+            <img src="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=1920&q=80" alt="Luxury Travel">
+        </div>
         <div class="hero-content">
-            <h1>Redefining Luxury Travel in a Reimagined World</h1>
-            <p class="hero-tagline">Where Elegance Meets Innovation</p>
-            <p>After navigating unprecedented global challenges, we emerge stronger, more refined, and deeply committed to crafting extraordinary journeys that transcend expectations. Welcome to the new era of luxury travel.</p>
+            <p class="hero-subtitle">Est. 2015</p>
+            <h1>Redefining Luxury Travel</h1>
+            <p class="hero-tagline">Where Extraordinary Experiences Meet Sustainable Excellence</p>
+            <p class="hero-description">
+                Discover a world of bespoke travel experiences crafted exclusively for discerning travelers seeking authenticity, luxury, and unparalleled service in every journey.
+            </p>
+            <div class="hero-cta">
+                <a href="#contact" class="btn btn-primary">Start Your Journey</a>
+                <a href="#virtual" class="btn btn-secondary">Explore Experiences</a>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
         </div>
     </section>
 
-    <!-- JOURNEY (kept) -->
+    <!-- Journey -->
     <section id="journey">
-        <div class="journey-content">
-            <h2 class="section-title">Our Journey</h2>
-            <p class="section-subtitle">From crisis to renaissance, discover how we transformed adversity into opportunity and reimagined the future of luxury travel.</p>
-
-            <div class="story-block">
-                <h3>The Challenge</h3>
-                <p>When the pandemic brought global travel to an unprecedented halt in 2020, Luxe Horizons faced its greatest test. Operations ceased overnight, partnerships dissolved, and the very foundation of our industry seemed uncertain. What appeared to be an ending became the catalyst for profound transformation.</p>
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-label">Our Story</p>
+                <h2 class="section-title">A Journey of Excellence</h2>
+                <div class="section-decoration"></div>
+                <p class="section-description">
+                    From humble beginnings to industry leadership, our evolution reflects an unwavering commitment to transforming luxury travel through innovation, sustainability, and exceptional service.
+                </p>
             </div>
-
-            <div class="story-block">
-                <h3>The Transformation</h3>
-                <p>Rather than retreat, we chose to reimagine. We invested in virtual experiences, strengthened our commitment to sustainable luxury, and deepened relationships with our most valued clients. We rebuilt our technology infrastructure, curated partnerships with the world's finest hospitality brands, and developed innovative safety protocols that set new industry standards.</p>
-            </div>
-
-            <div class="story-block">
-                <h3>The Renaissance</h3>
-                <p>Today, we stand at the forefront of a new era in luxury travel. Our experiences are more personalized, our commitment to sustainability is unwavering, and our vision for the future has never been clearer. We have emerged not just recovered, but revolutionized.</p>
-            </div>
-
-            <div class="timeline" id="timeline">
-                <div class="milestone">
-                    <div class="milestone-year">2020</div>
-                    <h4>Strategic Pause</h4>
-                    <p>Complete operational assessment and client communication strategy implementation</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2020</div>
+                        <h3 class="timeline-title">Strategic Pause</h3>
+                        <p class="timeline-description">
+                            Complete operational assessment and client communication strategy implementation during unprecedented global challenges.
+                        </p>
+                    </div>
+                    <div class="timeline-marker"></div>
                 </div>
-                <div class="milestone">
-                    <div class="milestone-year">2021</div>
-                    <h4>Digital Innovation</h4>
-                    <p>Launch of virtual travel experiences and technology platform modernization</p>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2021</div>
+                        <h3 class="timeline-title">Digital Innovation</h3>
+                        <p class="timeline-description">
+                            Launch of virtual travel experiences and technology platform modernization. Pioneered immersive digital journeys.
+                        </p>
+                    </div>
+                    <div class="timeline-marker"></div>
                 </div>
-                <div class="milestone">
-                    <div class="milestone-year">2022</div>
-                    <h4>Phased Reopening</h4>
-                    <p>Curated destination partnerships and enhanced safety protocol integration</p>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2022</div>
+                        <h3 class="timeline-title">Phased Reopening</h3>
+                        <p class="timeline-description">
+                            Curated destination partnerships and enhanced safety protocol integration. Reimagined luxury travel.
+                        </p>
+                    </div>
+                    <div class="timeline-marker"></div>
                 </div>
-                <div class="milestone">
-                    <div class="milestone-year">2023</div>
-                    <h4>Full Renaissance</h4>
-                    <p>Complete service portfolio relaunch with sustainability-first luxury experiences</p>
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <div class="timeline-year">2023</div>
+                        <h3 class="timeline-title">Full Renaissance</h3>
+                        <p class="timeline-description">
+                            Complete service portfolio relaunch with sustainability-first luxury experiences. Achieved carbon-neutral operations.
+                        </p>
+                    </div>
+                    <div class="timeline-marker"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- VIRTUAL (kept) -->
+    <!-- Virtual Experiences -->
     <section id="virtual">
-        <h2 class="section-title">Virtual Travel Experience</h2>
-        <p class="section-subtitle">Introducing immersive digital journeys that transcend physical boundaries while inspiring future travels.</p>
-
-        <div class="virtual-content">
-            <div class="virtual-showcase">
-                <h3>The Maldives Immersion</h3>
-                <p style="color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 2rem;">A fully interactive virtual reality experience showcasing our exclusive overwater villa collection. Explore pristine marine sanctuaries, tour sustainable luxury properties, meet local artisans, and experience world-class dining through 360-degree immersive content.</p>
-
-                <div class="animation-placeholder">
-                    <p style="color: var(--gold); font-size: 1.2rem; z-index: 1;">Interactive VR Experience</p>
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-label">Immersive Travel</p>
+                <h2 class="section-title">Virtual Experiences</h2>
+                <div class="section-decoration"></div>
+                <p class="section-description">
+                    Explore destinations before you travel with our cutting-edge virtual reality experiences.
+                </p>
+            </div>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800&q=80" alt="Paris" class="experience-image">
+                    <div class="experience-overlay">
+                        <h3 class="experience-title">Parisian Elegance</h3>
+                        <p class="experience-description">
+                            Walk the streets of Montmartre, explore the Louvre's corridors, and experience Parisian café culture through immersive tours.
+                        </p>
+                        <a href="#" class="experience-link">Explore Paris</a>
+                    </div>
                 </div>
-
-                <div class="virtual-features">
-                    <div class="feature-item">
-                        <h4>360° Property Tours</h4>
-                        <p>Navigate through our partner resorts with complete freedom, examining every detail at your pace</p>
+                <div class="experience-card">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80" alt="Alps" class="experience-image">
+                    <div class="experience-overlay">
+                        <h3 class="experience-title">Alpine Adventures</h3>
+                        <p class="experience-description">
+                            Experience breathtaking mountain vistas, luxury chalets, and world-class ski resorts in stunning virtual reality.
+                        </p>
+                        <a href="#" class="experience-link">Discover Alps</a>
                     </div>
-                    <div class="feature-item">
-                        <h4>Live Cultural Sessions</h4>
-                        <p>Real-time connections with local guides, chefs, and cultural ambassadors</p>
-                    </div>
-                    <div class="feature-item">
-                        <h4>Personalized Planning</h4>
-                        <p>Save favorites, request information, and schedule consultations directly within the experience</p>
-                    </div>
-                    <div class="feature-item">
-                        <h4>Environmental Impact</h4>
-                        <p>Discover each property's sustainability initiatives and conservation partnerships</p>
+                </div>
+                <div class="experience-card">
+                    <img src="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=80" alt="Islands" class="experience-image">
+                    <div class="experience-overlay">
+                        <h3 class="experience-title">Island Paradise</h3>
+                        <p class="experience-description">
+                            Dive into crystal-clear waters, explore pristine beaches, and tour exclusive overwater villas in tropical destinations.
+                        </p>
+                        <a href="#" class="experience-link">Visit Islands</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ROI (kept) -->
+    <!-- Features -->
+    <section id="features">
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-label">Why Choose Us</p>
+                <h2 class="section-title">Luxury Redefined</h2>
+                <div class="section-decoration"></div>
+                <p class="section-description">
+                    We combine decades of expertise with innovative technology to deliver travel experiences that exceed every expectation.
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">✨</div>
+                    <h3 class="feature-title">Bespoke Itineraries</h3>
+                    <p class="feature-description">
+                        Every journey is meticulously crafted to match your unique preferences, ensuring an experience as individual as you are.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3 class="feature-title">Sustainable Luxury</h3>
+                    <p class="feature-description">
+                        Travel responsibly without compromise. Our carbon-neutral operations protect the destinations you love.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">24/7 Concierge</h3>
+                    <p class="feature-description">
+                        Round-the-clock support from dedicated travel experts ensures seamless experiences from planning through return.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💎</div>
+                    <h3 class="feature-title">Exclusive Access</h3>
+                    <p class="feature-description">
+                        Gain entry to private villas, members-only clubs, and experiences unavailable through conventional travel services.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI/Value -->
     <section id="roi">
-        <h2 class="section-title">Customer Lifetime Value Model</h2>
-        <p class="section-subtitle">Understanding the long-term value of client relationships drives our commitment to exceptional experiences.</p>
-
-        <div class="roi-content">
-            <div class="formula-box">
-                <h3>CLV Calculation Framework</h3>
-                <div class="formula">
-                    CLV = (Average Trip Value × Annual Trips × Client Lifespan) - Acquisition Cost
-                </div>
-                <p class="formula-desc">This model accounts for repeat bookings, referrals, and the compounding value of trust-based relationships in luxury travel.</p>
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-label">By The Numbers</p>
+                <h2 class="section-title">Exceptional Value</h2>
+                <div class="section-decoration"></div>
+                <p class="section-description">
+                    Our track record speaks for itself. Discover why discerning travelers choose Black Tomato.
+                </p>
             </div>
-
-            <div style="overflow-x:auto;"> <!-- FIX: container ensures table never breaks layout -->
-                <table class="roi-table">
-                    <thead>
-                        <tr>
-                            <th>Client Segment</th>
-                            <th>Avg Trip Value</th>
-                            <th>Annual Frequency</th>
-                            <th>Lifespan (Years)</th>
-                            <th>Estimated CLV</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Conscious Explorer</td>
-                            <td>$25,000</td>
-                            <td>2.5 trips</td>
-                            <td>6 years</td>
-                            <td>$375,000</td>
-                        </tr>
-                        <tr>
-                            <td>Elite Connoisseur</td>
-                            <td>$75,000</td>
-                            <td>4 trips</td>
-                            <td>8 years</td>
-                            <td>$2,400,000</td>
-                        </tr>
-                        <tr>
-                            <td>Millennial Maverick</td>
-                            <td>$15,000</td>
-                            <td>3 trips</td>
-                            <td>5 years</td>
-                            <td>$225,000</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="value-grid">
+                <div class="value-card">
+                    <div class="value-number">3000+</div>
+                    <p class="value-label">Luxury Journeys</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-number">98%</div>
+                    <p class="value-label">Client Satisfaction</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-number">150+</div>
+                    <p class="value-label">Destinations</p>
+                </div>
+                <div class="value-card">
+                    <div class="value-number">4.9★</div>
+                    <p class="value-label">Average Rating</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- CONTACT (kept) -->
+    <!-- Testimonials -->
+    <section id="testimonials">
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-label">Client Stories</p>
+                <h2 class="section-title">What Travelers Say</h2>
+                <div class="section-decoration"></div>
+            </div>
+            <div class="testimonials-slider">
+                <div class="testimonial-card active">
+                    <p class="testimonial-quote">
+                        Black Tomato transformed our anniversary trip into an unforgettable journey. Every detail was perfect, from the private villa to the surprise sunset dinner.
+                    </p>
+                    <p class="testimonial-author">Sarah & Michael Chen</p>
+                    <p class="testimonial-role">25th Anniversary, Santorini</p>
+                    <div class="testimonial-rating">★★★★★</div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">
+                        The virtual experience helped us choose the perfect destination for our honeymoon. The actual trip exceeded even those high expectations.
+                    </p>
+                    <p class="testimonial-author">James & Emma Rodriguez</p>
+                    <p class="testimonial-role">Honeymoon, Bali</p>
+                    <div class="testimonial-rating">★★★★★</div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-quote">
+                        As a CEO, my time is precious. Black Tomato's concierge service handled everything flawlessly. The sustainability commitment is also commendable.
+                    </p>
+                    <p class="testimonial-author">Alexandra Winters</p>
+                    <p class="testimonial-role">Business & Leisure, Switzerland</p>
+                    <div class="testimonial-rating">★★★★★</div>
+                </div>
+            </div>
+            <div class="slider-controls">
+                <button class="slider-btn" id="prevBtn">‹</button>
+                <button class="slider-btn" id="nextBtn">›</button>
+            </div>
+            <div class="slider-dots">
+                <button class="dot active" data-slide="0"></button>
+                <button class="dot" data-slide="1"></button>
+                <button class="dot" data-slide="2"></button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
     <section id="contact">
-        <h2 class="section-title">Begin Your Journey</h2>
-        <p class="section-subtitle">Connect with our team to discover how Luxe Horizons can craft your next extraordinary experience.</p>
-
-        <div class="contact-container">
-            <form class="contact-form" id="contactForm">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="name" required>
+        <div class="section-container">
+            <div class="section-header">
+                <p class="section-label">Get In Touch</p>
+                <h2 class="section-title">Begin Your Journey</h2>
+                <div class="section-decoration"></div>
+                <p class="section-description">
+                    Ready to experience luxury travel redefined? Contact our team to start planning your next extraordinary adventure.
+                </p>
+            </div>
+            <div class="contact-container">
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" required placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required placeholder="john@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" placeholder="+1 (555) 123-4567">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" required placeholder="Tell us about your dream destination..."></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                    <div class="success-message" id="successMessage">
+                        Thank you! Our luxury travel specialists will contact you within 24 hours.
+                    </div>
+                </form>
+                <div class="contact-info">
+                    <div class="info-item">
+                        <div class="info-icon">📧</div>
+                        <p class="info-title">Email</p>
+                        <div class="info-details">
+                            <a href="mailto:luxury@blacktomato.com">luxury@blacktomato.com</a>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">📞</div>
+                        <p class="info-title">Phone</p>
+                        <div class="info-details">
+                            <a href="tel:+15551234567">+1 (555) 123-4567</a><br>
+                            Mon-Fri: 9AM - 6PM EST
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon">📍</div>
+                        <p class="info-title">Office</p>
+                        <div class="info-details">
+                            Park Avenue, New York<br>
+                            NY 10022, United States
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" required></textarea>
-                </div>
-                <button type="submit" class="submit-btn" id="submitBtn">SEND MESSAGE</button>
-                <div id="contactSuccess" role="status" aria-live="polite" style="display:none; margin-top:1rem; color: #086; background:#e6f6ef; padding:0.75rem; border-left:4px solid #0a8;">
-                    Thank you for your inquiry. Our team will contact you within 24 hours.
-                </div>
-            </form>
+            </div>
         </div>
     </section>
 
-    <!-- FOOTER (kept) -->
+    <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Black Tomato</h3>
-                <p>Redefining luxury travel through extraordinary experiences, sustainable practices, and uncompromising service excellence since 2015.</p>
-                <div class="social-links">
-                    <a href="#" aria-label="Instagram">IG</a>
-                    <a href="#" aria-label="Facebook">FB</a>
-                    <a href="#" aria-label="Twitter">TW</a>
-                    <a href="#" aria-label="LinkedIn">LI</a>
+        <div class="footer-container">
+            <div class="footer-main">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <svg class="footer-logo-svg" viewBox="0 0 100 100">
+                            <ellipse cx="50" cy="55" rx="35" ry="32" fill="#c9302c"/>
+                            <path d="M45,25 Q40,20 35,23 Q30,26 32,30 L38,35 Z" fill="#2d5016"/>
+                            <path d="M50,23 Q50,18 55,20 Q60,22 58,27 L52,33 Z" fill="#2d5016"/>
+                            <path d="M55,25 Q60,21 65,24 Q70,27 68,32 L62,36 Z" fill="#2d5016"/>
+                        </svg>
+                        <span class="footer-logo-text">BLACK TOMATO</span>
+                    </div>
+                    <p style="margin-top: 2rem;">
+                        Redefining luxury travel through extraordinary experiences, sustainable practices, and uncompromising service excellence since 2015.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">IG</a>
+                        <a href="#" class="social-link">FB</a>
+                        <a href="#" class="social-link">TW</a>
+                        <a href="#" class="social-link">LI</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#journey">Our Journey</a></li>
+                        <li><a href="#virtual">Virtual Experiences</a></li>
+                        <li><a href="#features">Why Choose Us</a></li>
+                        <li><a href="#roi">Client Value</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Bespoke Travel</a></li>
+                        <li><a href="#">Virtual Tours</a></li>
+                        <li><a href="#">Concierge Service</a></li>
+                        <li><a href="#">Group Travel</a></li>
+                        <li><a href="#">Corporate Retreats</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Newsletter</h3>
+                    <p>Subscribe to receive exclusive travel inspiration and special offers.</p>
+                    <form style="margin-top: 2rem;" id="newsletterForm">
+                        <input type="email" placeholder="Your email" style="width: 100%; padding: 0.75rem; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; color: white; margin-bottom: 1rem;">
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.75rem;">Subscribe</button>
+                    </form>
                 </div>
             </div>
-            
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul class="footer-links">
-                    <li><a href="#journey">Our Journey</a></li>
-                    <li><a href="#virtual">Virtual Experiences</a></li>
-                    <li><a href="#roi">Client Value</a></li>
-                    <li><a href="#contact">Contact Us</a></li>
-                </ul>
+            <div class="footer-bottom">
+                <p class="copyright">© 2025 Black Tomato. All Rights Reserved.</p>
+                <div class="footer-legal">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
             </div>
-            
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: travel@luxehorizons.com</p>
-                <p>Phone: +1 (555) 123-4567</p>
-                <p>Hours: Mon-Fri 9AM-6PM EST</p>
-            </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <p>BLACK TOMATO</p>
-            <p class="copyright">© 2025 Black Tomato. All Rights Reserved. Privacy Policy | Terms of Service</p>
         </div>
     </footer>
 
-    <!-- =========================
-         JavaScript fixes (non-destructive)
-         - ensures backgrounds load robustly
-         - prevents overflow caused by late-loading images
-         - supplies fallback for broken backgrounds and <img>
-         - fixes anchor offset for fixed navbar
-         - improves contact form UX (inline success)
-       ========================= -->
+    <!-- Scroll to Top -->
+    <button class="scroll-to-top" id="scrollToTop">↑</button>
+
     <script>
-        // small helper to create an inline svg placeholder (data URI)
-        function svgPlaceholder(w=1600, h=900, bg='#f5f5f5') {
-            var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'"><rect width="100%" height="100%" fill="'+bg+'"/><g><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#d0d0d0" font-family="Arial, Helvetica, sans-serif" font-size="'+Math.floor(h/20)+'">Image unavailable</text></g></svg>';
-            return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
-        }
-
-        // Ensure any <img> has lazy loading and fallback
-        (function normalizeImgs(){
-            var imgs = document.getElementsByTagName('img');
-            for(var i=0;i<imgs.length;i++){
-                var img = imgs[i];
-                if(!img.hasAttribute('loading')) img.setAttribute('loading','lazy');
-                // set style to avoid overflow
-                img.style.maxWidth = '100%';
-                img.style.height = 'auto';
-                img.style.objectFit = 'cover';
-                // add fallback handler if none
-                if(!img.onerror){
-                    img.onerror = function(){ if(this.src !== svgPlaceholder()) this.src = svgPlaceholder(); };
-                }
-            }
-        })();
-
-        // Robust background-image loader + fallback
-        (function bgLoader(){
-            // target common hero and showcase backgrounds (elements using inline background-image)
-            var els = document.querySelectorAll('.hero, .virtual-showcase, .animation-placeholder');
-            els.forEach(function(el){
-                var style = window.getComputedStyle(el);
-                var bg = style.backgroundImage || el.style.backgroundImage || '';
-                // extract url if set inline or computed
-                var match = bg.match(/url\(["']?(.*?)["']?\)/);
-                if(match && match[1]){
-                    var url = match[1];
-                    var img = new Image();
-                    img.onload = function(){
-                        // keep existing background; ensure sizing classes present (already handled by CSS)
-                    };
-                    img.onerror = function(){
-                        // swap to placeholder to avoid broken rendering
-                        el.style.backgroundImage = 'url("' + svgPlaceholder(1200,800,'#111') + '")';
-                        el.style.backgroundSize = 'cover';
-                        el.style.backgroundPosition = 'center';
-                    };
-                    img.src = url;
-                } else {
-                    // if no background-image, do nothing
-                }
-            });
-        })();
-
-        // Fix for background-attachment on mobile devices: explicitly disable on touch devices
-        (function disableFixedOnTouch(){
-            var hasTouch = (('ontouchstart' in window) || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0);
-            if(hasTouch){
-                document.querySelectorAll('.hero').forEach(function(h){ h.style.backgroundAttachment = 'scroll'; });
-            }
-        })();
-
-        // Prevent layout jumping from late-loading images by forcing reflow and ensuring no overflow
-        window.addEventListener('load', function(){
-            // small reflow to ensure scrollbars don't appear unexpectedly
-            document.documentElement.style.overflowX = 'hidden';
-            document.body.style.overflowX = 'hidden';
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 2000);
         });
 
-        // IntersectionObserver to add .visible class (kept behavior from original scripts if present)
-        (function addObserver(){
-            var items = document.querySelectorAll('.milestone, .story-block, .feature-item');
-            if('IntersectionObserver' in window){
-                var obs = new IntersectionObserver(function(entries){
-                    entries.forEach(function(entry){
-                        if(entry.isIntersecting){
-                            entry.target.classList.add('visible');
-                        }
-                    });
-                }, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
-                items.forEach(function(it){ obs.observe(it); });
-            } else { // fallback: show all
-                items.forEach(function(it){ it.classList.add('visible'); });
-            }
-        })();
+        // Navigation
+        const nav = document.getElementById('mainNav');
+        const menuToggle = document.getElementById('menuToggle');
+        const mobileNav = document.getElementById('mobileNav');
+        const mobileLinks = document.querySelectorAll('.mobile-nav-menu a');
 
-        // Anchor adjustment for fixed nav so headings aren't hidden under nav
-        (function anchorOffset(){
-            var nav = document.querySelector('nav');
-            function scrollToAdjusted(hash){
-                var target = document.querySelector(hash);
-                if(!target) return;
-                var rect = target.getBoundingClientRect();
-                var navH = nav ? nav.offsetHeight : 0;
-                var top = window.pageYOffset + rect.top - navH - 12;
-                window.scrollTo({ top: top, behavior: 'smooth' });
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 100) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
             }
-            // override default anchor behavior
-            document.querySelectorAll('a[href^="#"]').forEach(function(a){
-                a.addEventListener('click', function(e){
-                    var href = this.getAttribute('href');
-                    if(href && href.length > 1){
-                        var target = document.querySelector(href);
-                        if(target){
-                            e.preventDefault();
-                            scrollToAdjusted(href);
-                        }
-                    }
-                });
+        });
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            mobileNav.classList.toggle('active');
+            document.body.style.overflow = menuToggle.classList.contains('active') ? 'hidden' : '';
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                mobileNav.classList.remove('active');
+                document.body.style.overflow = '';
             });
-        })();
+        });
 
-        // CONTACT: replace alert with inline message and disable button while "sending"
-        (function contactUX(){
-            var form = document.getElementById('contactForm');
-            var success = document.getElementById('contactSuccess');
-            var btn = document.getElementById('submitBtn');
-            if(!form) return;
-            form.addEventListener('submit', function(e){
-                e.preventDefault();
-                if(!form.checkValidity()){
-                    form.reportValidity();
-                    return;
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                const target = document.querySelector(href);
+                if (target) {
+                    e.preventDefault();
+                    const navHeight = nav.offsetHeight;
+                    const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight - 20;
+                    window.scrollTo({ top: targetPosition, behavior: 'smooth' });
                 }
-                btn.disabled = true;
-                btn.style.opacity = '0.6';
-                // simulate network
-                setTimeout(function(){
-                    btn.disabled = false;
-                    btn.style.opacity = '';
-                    success.style.display = 'block';
-                    form.reset();
-                    setTimeout(function(){ success.style.display = 'none'; }, 6000);
-                }, 800);
             });
-        })();
+        });
+
+        // Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -100px 0px' });
+
+        document.querySelectorAll('.section-header, .timeline-item, .experience-card, .feature-card, .value-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Testimonial Slider
+        const testimonialCards = document.querySelectorAll('.testimonial-card');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function showSlide(index) {
+            currentSlide = index < 0 ? testimonialCards.length - 1 : index >= testimonialCards.length ? 0 : index;
+            testimonialCards.forEach((card, i) => {
+                card.classList.toggle('active', i === currentSlide);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+
+        function nextSlide() { showSlide(currentSlide + 1); }
+        function prevSlide() { showSlide(currentSlide - 1); }
+        function startAutoSlide() { slideInterval = setInterval(nextSlide, 6000); }
+        function stopAutoSlide() { clearInterval(slideInterval); }
+
+        nextBtn.addEventListener('click', () => { nextSlide(); stopAutoSlide(); startAutoSlide(); });
+        prevBtn.addEventListener('click', () => { prevSlide(); stopAutoSlide(); startAutoSlide(); });
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => { showSlide(i); stopAutoSlide(); startAutoSlide(); });
+        });
+
+        startAutoSlide();
+
+        // Contact Form
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const successMsg = document.getElementById('successMessage');
+            successMsg.classList.add('show');
+            e.target.reset();
+            setTimeout(() => successMsg.classList.remove('show'), 5000);
+        });
+
+        // Newsletter Form
+        document.getElementById('newsletterForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            btn.textContent = 'Subscribed!';
+            btn.style.background = '#28a745';
+            e.target.reset();
+            setTimeout(() => {
+                btn.textContent = 'Subscribe';
+                btn.style.background = '';
+            }, 3000);
+        });
+
+        // Scroll to Top
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => {
+            scrollToTopBtn.classList.toggle('visible', window.pageYOffset > 500);
+        });
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Progress Bar
+        const progressBar = document.getElementById('progressBar');
+        window.addEventListener('scroll', () => {
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.pageYOffset / windowHeight) * 100;
+            progressBar.style.width = scrolled + '%';
+        });
+
+        // Value Counter Animation
+        const valueNumbers = document.querySelectorAll('.value-number');
+        let countersAnimated = false;
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !countersAnimated) {
+                    countersAnimated = true;
+                    valueNumbers.forEach(valueNum => {
+                        const finalValue = valueNum.textContent;
+                        const isStar = finalValue.includes('★');
+                        const numericValue = isStar ? parseFloat(finalValue) : parseInt(finalValue.replace(/\D/g, ''));
+                        let currentValue = 0;
+                        const increment = numericValue / 50;
+                        const counter = setInterval(() => {
+                            currentValue += increment;
+                            if (currentValue >= numericValue) {
+                                clearInterval(counter);
+                                valueNum.textContent = finalValue;
+                            } else {
+                                valueNum.textContent = isStar ? currentValue.toFixed(1) + '★' : 
+                                    finalValue.includes('%') ? Math.floor(currentValue) + '%' :
+                                    finalValue.includes('+') ? Math.floor(currentValue) + '+' :
+                                    Math.floor(currentValue);
+                            }
+                        }, 40);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+        valueNumbers.forEach(num => counterObserver.observe(num));
+
+        // Parallax Effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroBg = document.querySelector('.hero-bg img');
+            if (heroBg && scrolled < window.innerHeight) {
+                heroBg.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // 3D Tilt Effect on Experience Cards
+        document.querySelectorAll('.experience-card').forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+        });
+
+        // Console Easter Egg
+        console.log('%c🍅 BLACK TOMATO', 'color: #d4af87; font-size: 24px; font-weight: bold;');
+        console.log('%cRedefining Luxury Travel', 'color: #c9302c; font-size: 14px;');
+        console.log('%cWebsite crafted with ❤️ and attention to detail', 'color: #7a7a7a; font-size: 12px;');
     </script>
 </body>
 </html>
-
-
